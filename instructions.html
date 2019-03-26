@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <script>
+        var isAuthenticationRequired = true;
+        var date = new Date();
+        var jsVersion = date.getTime();
+        document.write('<link rel="stylesheet" type="text/css" href="css/mock_style.css?v=' + jsVersion + '"\/\>');
+        document.write('<link rel="stylesheet" type="text/css" href="css/style.css?v=' + jsVersion + '"\/\>');
+        document.write('<link rel="stylesheet" type="text/css" href="css/keyboard.css?v=' + jsVersion + '"\/\>');
+        document.write('<link rel="stylesheet" type="text/css" href="css/number_style.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" type="text/css" href="css/aecInstructions.css?v=' + jsVersion + '"\/\>');
+        document.write('<script type="text/javascript" src="js/jquery-1.8.0.min.js?v=' + jsVersion + '"\><\/script>');
+        document.write('<script type="text/javascript" src="js/jquery.cookie.js?v=' + jsVersion + '"\><\/script>');
+        //document.write('<script type="text/javascript" src="js/jquery.js?v='+jsVersion+'"\><\/script>');
+        document.write('<script type="text/javascript" src="js/keyboard.js?v=' + jsVersion + '"\><\/script>');
+        document.write('<script type="text/javascript" src="js/jquery.actual.min.js?v=' + jsVersion + '"\><\/script>');
+        // document.write('<script type="text/javascript" src="js/bean.js?v=' + jsVersion + '"\><\/script>');
+        // document.write('<script type="text/javascript" src="js/top.js?v=' + jsVersion + '"\><\/script>');
+    </script>
+    <script>
+        $(window).load(function() {
+            setInstruHeights();
+        });
+
+        window.onresize = function(event) {
+            setInstruHeights();
+        };
+
+        function createDefaultSubject(defLang) {
+            var defaultLang = document.getElementById("defaultLanguage");
+            var date = new Date();
+            date.setTime(date.getTime() + (5 * 60 * 1000));
+            var expires = "; expires=" + date.toGMTString();
+            document.cookie = "defaultLang=" + defLang + ";viewLangName=" + mockVar.langName + "qp_id=" + mockVar.qpId + expires + "; path=/";
+            sessionStorage.defaultLang = defLang;
+            sessionStorage.viewLangName = mockVar.langName
+        }
+
+        function showId() {
+            if (mockVar.storeCandResponse == 1)
+                maintainReadyAudit();
+            var url = document.URL;
+            var orgId = "";
+            var mockId = "";
+            var attemptId = "";
+            var candMasterId = "";
+            var authenticationKey = "";
+            if (url.indexOf("instructions.html?") >= 0) {
+                var params = url.split("instructions.html?");
+                orgId = $.trim(params[1]).split("@@")[0];
+                mockId = $.trim(params[1]).split("@@")[1];
+                attemptId = $.trim(params[1]).split("@@")[2];
+                candMasterId = "";
+                authenticationKey = $.trim(params[1]).split("@@")[5];
+                if (mockVar.storeCandResponse == 1) {
+                    candMasterId = $.trim(params[1]).split("@@")[3];
+                    if (candMasterId.indexOf("#") > -1) {
+                        candMasterId = candMasterId.substring(0, candMasterId.indexOf("#"));
+                    }
+                }
+                if (typeof(attemptId) != 'undefined' && attemptId.indexOf("#") > -1) {
+                    attemptId = attemptId.substring(0, attemptId.indexOf("#"));
+                }
+                if (typeof(mockId) != 'undefined' && mockId.indexOf("#") > -1) {
+                    mockId = mockId.substring(0, mockId.indexOf("#"));
+                }
+
+                if (typeof(authenticationKey) != 'undefined' && authenticationKey.indexOf("#") > -1) {
+                    authenticationKey = authenticationKey.substring(0, authenticationKey.indexOf("#"));
+                }
+            } else {
+                mockId = $.cookie("assessmentId");
+            }
+            isAuthenticationRequired = false;
+            if (mockId.indexOf("M") >= 0) {
+                //window.location.href="quiz.html?"+orgId+"@@"+mockId+"@@"+attemptId+"@@"+candMasterId+"@@"+0+"@@"+authenticationKey;
+                window.location.href = "quiz.html?" + orgId + "@@" + mockId + "@@0@@0@@0@@0";
+            } else
+                window.location.href = "quiz.html";
+            //window.location.href="quiz.html?"+orgId+"@@"+mockId+"@@"+attemptId+"@@"+candMasterId+"@@"+0;
+        }
+
+        var page = "next";
+
+        function showInstr() {
+            if (page == "next") {
+                $('#iframeId').contents().find("#firstPage").hide();
+                $('#iframeId').contents().find("#secondPagep1").show();
+                $("#secondPagep2").show();
+                page = "previous";
+                $("#instPagination").hide();
+                $("#previousbtn").text(mockLabels.previous);
+                $("#instruction").removeClass("sysInstruLabel");
+                $("#instruction").addClass("otherInstruLabel");
+                $('#PreviousInst').show();
+                $('#readylink').show();
+                loadInstruLabels();
+            } else if (page == "previous") {
+                $('#iframeId').contents().find("#secondPagep1").hide();
+                $("#secondPagep2").hide();
+                $('#iframeId').contents().find("#firstPage").show();
+                page = "next";
+                $("#instPagination").show();
+                $('#PreviousInst').hide();
+                $('#readylink').hide();
+                $("#nextTxt").text(mockLabels.next);
+                $("#instruction").removeClass("otherInstruLabel");
+                $("#instruction").addClass("sysInstruLabel");
+                loadInstruLabels();
+            }
+            setInstruHeights();
+        }
+
+        function readyToBegin() {
+            if (document.getElementById("defaultLanguage").options.length > 2) {
+                var lang = document.getElementById("defaultLanguage");
+                if (lang.value != '0') {
+                    createDefaultSubject(lang.value);
+                } else {
+                    cnfPop('InfoPopup');
+                    // $("#infoMsg2").html("Please choose your default language.");
+                    $("#infoMsg2").text(mockLabels.chooseDefaultLangErr);
+                    return false;
+                }
+            } else {
+                createDefaultSubject(document.getElementById("defaultLanguage").options[1].value);
+            }
+            if (document.getElementById("disclaimer").checked == true) {
+                document.getElementById("readylink").removeAttribute("disabled", 0);
+                showId();
+            } else {
+                cnfPop('InfoPopup');
+                //$("#infoMsg2").html('Please accept terms and conditions before proceeding.');
+                $("#infoMsg2").text(mockLabels.acceptDisclaimerMessage);
+                document.getElementById("readylink").disabled = "disabled";
+                return false;
+            }
+        }
+
+        function linkDisp() {
+            if (document.getElementById("disclaimer").checked == true) {
+                document.getElementById("readylink").removeAttribute("disabled", 0);
+            } else {
+                document.getElementById("readylink").disabled = "disabled";
+            }
+        }
+
+        function multiLangInstru() {
+
+            $('#iframeId').contents().find("#basInst option[value='instEnglish']").attr("selected", "selected");
+            if (document.getElementById("multiLangDD") != null) {
+                $("#multiLangDD option").each(function() {
+                    if ($(this).text().toUpperCase() == 'HINDI') {
+                        $('#iframeId').contents().find('#basInst').parent().show();
+                    }
+                });
+                $("#multiLangDD").change(function() {
+                    var select = this.value;
+                    $("#multiLangDD option").each(function() {
+                        if (select == this.value) {
+                            $("#instLang" + select).show();
+                        } else {
+                            $("#instLang" + this.value).hide();
+                        }
+                    });
+                });
+            }
+        }
+
+        function basInst(param) {
+            if (param == 'instEnglish') {
+                $('#instEnglish').show();
+                $('#instHindi').hide();
+            } else {
+                $('#instEnglish').hide();
+                $('#instHindi').show();
+            }
+        }
+
+
+
+        function setInstruHeights() {
+            var height = 0;
+            if ($(window).width() < 1023) {
+                height = $(window).height() - $("#header").height();
+            } else {
+                height = $(window).height() - ($("#header").height() + $("#footer").height());
+            }
+            $('#mainleft').css({
+                "height": height
+            });
+            $('#mainright').css({
+                "height": height
+            });
+            // if (mockVar.storeCandResponse == 1) {
+
+            //     $('#secondPagep2').show();
+            //     $('#instPagination').hide();
+            //     $('#secondPageLangView').hide();
+            //     $('#PreviousInst').hide();
+            //     $('#iframeId').contents().find('#secondPagep1').show();
+            //     $('#iframeId').contents().find('#otherImpInstru').show();
+            //     $('#iframeId').contents().find('#firstPage').css('height', '');
+            //     $('#iframeId').contents().find('#secondPagep1').css({
+            //         "height": ""
+            //     });
+            //     $("#commonPageInstruction").css({
+            //         'height': height - $('.titlepath').outerHeight() - $('.btnsection').outerHeight() - $('#secondPagep2').outerHeight() - 30
+            //     });
+            //     $('#readylink').show();
+
+            // } else {
+
+            //     if (page == "next") {
+            //         $("#commonPageInstruction").css({
+            //             'height': height - $('.titlepath').outerHeight() - $('.btnsection').outerHeight() - 30
+            //         });
+            //     } else {
+            //         $("#commonPageInstruction").css({
+            //             'height': height - $('.titlepath').outerHeight() - $('.btnsection').outerHeight() - $('#secondPagep2').outerHeight() - 30
+            //         });
+            //     }
+
+
+            // }
+
+
+        }
+
+        // function validateInstPageUrl() {
+        //     var url = document.URL;
+        //     var orgId = "";
+        //     var mockId = "";
+        //     if (url.indexOf("instructions.html?") >= 0) {
+        //         var params = url.split("instructions.html?");
+        //         orgId = $.trim(params[1]).split("@@")[0];
+        //         mockId = $.trim(params[1]).split("@@")[1];
+        //     } else if (url.indexOf("instructions.html") > 0) {
+        //         orgId = $.cookie("orgId");
+        //         mockId = $.cookie("assessmentId");
+        //     }
+        //     //alert($.cookie("orgId")+"Developing team Testing"+$.cookie("assessmentId"));
+
+
+        //     if (mockId != null && mockId.length > 0) {
+        //         if (mockId.indexOf("#") > -1) {
+        //             mockId = mockId.substring(0, mockId.indexOf("#"));
+        //         }
+        //         if (mockId != "") {
+        //             var xml = validateExpiry(orgId, mockId);
+        //             getCandIdFromCookie();
+        //             loadInstruLabels();
+        //             //readXML(xmlFilePath+'/confDetails.xml','readSysInstructionsXMLInstPage(xml,"'+orgId+'","'+mockId+'")');
+        //             readSysInstructionsXMLInstPage(xml, orgId, mockId);
+        //         } else {
+        //             window.location.href = "error.html";
+        //         }
+        //     } else {
+        //         window.location.href = "error.html";
+        //     }
+        // }
+
+
+        function readSysInstructionsXMLInstPage(xml, orgId, mockId) {
+            var langId = 1;
+            mockVar.mockCandidateName = $(xml).find("CandidateName").text();
+            if (typeof(sessionStorage.xmlFilePath) != "undefined")
+                xmlFilePath = sessionStorage.xmlFilePath;
+
+            //console.log(723);
+            if ($(xml).find('StoreCandResponse').length > 0 && $(xml).find('StoreCandResponse').text() == 'YES') {
+                mockVar.storeCandResponse = 1;
+            }
+            if (mockVar.qpId != "" && typeof(mockVar.qpId) != 'undefined' && mockVar.storeCandResponse != 1 && checkFileExist(xmlFilePath + mockVar.qpId + '/quiz.xml')) {
+                mockVar.availableQpId = mockVar.qpId;
+                //console.log(727);
+                //var QPxml = readAndReturnXML(xmlFilePath+'/'+mockVar.qpId+'/quiz.xml');
+            } else {
+                mockVar.availableQpId = '';
+                //console.log(731);
+                if (mockVar.storeCandResponse != 1) {
+                    QPxml = readAndReturnXML(xmlFilePath + '/quiz.xml');
+                } else {
+                    QPxml = "";
+                }
+            }
+
+            if (mockVar.storeCandResponse == 1) {
+                if (photographPath != 'NA') {
+                    $(".candidateImg").attr("src", photographPath);
+                } else {
+                    $(".candidateImg").hide();
+                }
+            } else {
+                if ($(xml).find("USEDEFAULTCANDIDATEIMG").length > 0 && $(xml).find("USEDEFAULTCANDIDATEIMG").text() == "NO") {
+                    $(".candidateImg").attr("src", $(xml).find("CANDIDATEIMGPATH").text());
+                } else {
+                    $(".candidateImg").attr("src", "images/NewCandidateImage.jpg");
+                }
+                if ($(xml).find("CandidateName").length > 0) {
+                    $('.candOriginalName').html(mockVar.mockCandidateName);
+                } else {
+                    $('.candOriginalName').html("John Smith");
+                }
+            }
+
+            var useSystemInstructions = $(xml).find("UseDefaultSystemInstruction").text();
+            var useDisclaimerInstructions = $(xml).find("UseDefaultDisclaimerInstruction").text();
+            var isOptionalSectionsAvailable = $(xml).find("ISOPTIONALSECTIONSAVAILABLE").text();
+            var isMarkedForReviewConsidered = $(xml).find("ConsiderMarkForReview").text();
+            var isInterruptionsAllowed = $(xml).find("Allowinterruptions").text();
+            if (mockVar.storeCandResponse == 0) {
+                if ($(xml).find("BannerPath").length > 0 && $.trim($(xml).find("BannerPath").text()).length > 0) {
+                    $("#bannerImg").html("<img height= '49px' src='" + $(xml).find("BannerPath").text() + "'/>");
+                }
+                if ($(xml).find("BannerText").length > 0 && $.trim($(xml).find("BannerText").text()).length > 0) {
+                    $("#header").css('background-color', $(xml).find("BannerText").text());
+                }
+            } else if (mockVar.storeCandResponse == 1) {
+                if ($(xml).find("ActualBannerPath").length > 0 && $.trim($(xml).find("ActualBannerPath").text()).length > 0) {
+                    $("#bannerImg").html("<img height= '49px' src='" + $(xml).find("ActualBannerPath").text() + "'/>");
+                }
+                if ($(xml).find("BannerBackGroundColour").length > 0 && $.trim($(xml).find("BannerBackGroundColour").text()).length > 0) {
+                    $("#header").css('background-color', $(xml).find("BannerBackGroundColour").text());
+                }
+            }
+            $("#VersionNo").html("Version " + $(xml).find("Version").text());
+            if (typeof(sessionStorage.xmlFilePath) != "undefined")
+                xmlFilePath = sessionStorage.xmlFilePath;
+
+            if (useSystemInstructions == "YES") {
+                var xml = readAndReturnXML(xmlFilePath + '/sysInstructions.xml');
+                $(xml).find("INSTRUCTION").each(function() {
+                    if ($.trim($(this).find("INSTRUCTIONTEXT").text()) == "")
+                        xml = readAndReturnXML('sysInstructions.xml');
+                });
+            } else {
+                var xml = readAndReturnXML(xmlFilePath + '/sysInstructions.xml');
+            }
+            if (useDisclaimerInstructions == "YES") {
+                var xmlForDisclaimer = readAndReturnXML(xmlFilePath + '/custInstructions.xml');
+                $(xmlForDisclaimer).find("INSTRUCTION").each(function() {
+                    if (mockVar.storeCandResponse == 1) {
+                        disclaimerContent = $.trim($(this).find("DISCLAIMERTEXTOA").text());
+                    } else {
+                        disclaimerContent = $.trim($(this).find("DISCLAIMERTEXT").text());
+                    }
+                    if (disclaimerContent == "")
+                        xmlForDisclaimer = readAndReturnXML('custInstructions.xml');
+                });
+            } else {
+                if (typeof(sessionStorage.xmlFilePath) != "undefined")
+                    xmlFilePath = sessionStorage.xmlFilePath;
+
+                var xmlForDisclaimer = readAndReturnXML(xmlFilePath + '/custInstructions.xml');
+            }
+            parseSysInstructions('inst', xml, useSystemInstructions.toUpperCase(), orgId, mockId, isOptionalSectionsAvailable.toUpperCase(), isMarkedForReviewConsidered.toUpperCase(), QPxml, xmlForDisclaimer, useDisclaimerInstructions, isInterruptionsAllowed);
+
+            var iframe = document.getElementById('iframeId');
+            var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+            if (innerDoc.getElementById("basInst").options.length > 1) {
+                $('#iframeId').contents().find('#basInst').parent().show();
+                $('#iframeId').contents().find('#cusInst').parent().show();
+                if (mockVar.storeCandResponse == 0)
+                    $('#defaultLangOptions').show();
+            }
+
+            if ($('#iframeId').contents().find('#basInst option:selected').val().indexOf('sysInstText') > -1)
+                langId = $('#iframeId').contents().find('#basInst option:selected').val().split('sysInstText')[1];
+            $('#iframeId').contents().find('.sysInstText' + langId).show();
+            $('#iframeId').contents().find('.cusInstText' + langId).show();
+            $('.sysInstText' + langId).show();
+            $('.cusInstText' + langId).show();
+            $('#pWait').hide();
+            if (mockVar.storeCandResponse == 1) {
+                $('#iframeId').contents().find("#secondPageLangView").hide();
+                if (!($('#secondPagep1 .cusInstText' + langId).text() == "The instructions are not available in the chosen language. ")) {
+                    $('#secondPagep1').show();
+                    $('#otherImpInstru').show();
+                } else {
+                    $('#secondPagep1').hide();
+                    $('#otherImpInstru').hide();
+                }
+            }
+
+        }
+
+        window.onbeforeunload = function(event) {
+            var url = document.URL;
+            if (url.indexOf("instructions.html") >= 0 && isAuthenticationRequired)
+                authenticationFileDeleted();
+        };
+    </script>
+</head>
+
+<body onload="setInstruHeights();" onselectstart="return false;" ondragstart="return false;">
+    <div id="container">
+        <div id="pWait" style="background: grey; height: 100%; width: 100%; z-index: 1999; position: absolute; opacity: 0.85; display: none;">
+            <div style="top:45%;position:relative;color:white">
+                <center><img src="images/busy4.gif" style="transparent url(none) no-repeat;padding:'32px 0 0 36px',width:'320px',height:'110px', margin:'0 0 0 10% display:block;"><br></center>
+            </div>
+        </div>
+
+        <div id="header" style="background-color: rgb(45, 112, 182);">
+            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    <tr>
+                        <td align="left" id="bannerImage">
+                            <div id="bannerImg" style="float:left"><img height="49px" src="/per/g21/pub/1831/ASM/OnlineAssessment/M1/banner.png?v=1542800626415"></div>
+                            <div id="bannerText" align="center" style="margin-top:10px; font-weight:bold;">
+                                <font size="4" color="#ffffff"></font>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="mainleft" style="height: 607px;">
+            <div class="titlepath sysInstruLabel" id="instruction" style="padding-left:15px;">Instructions</div>
+            <div id="commonPageInstruction" style="height: 497px;">
+                <iframe id="iframeId" src="./iframesInstruction.html" style="height:100%;width:100%;border:none;border-bottom:1px #CCC solid;"></iframe></div>
+            <div id="instPagination" class="btnsection" align="center">
+                <a id="instPaginationa" onclick="showInstr()" class="btn btn-primary" style="margin-top:19px; line-height: 38px;"><span><strong><span id="nextTxt">Next</span></strong><img id="imgdetails" src="images/Forward-25.png" width="25" height="18"></span></a>
+            </div>
+            <div id="secondPagep2" style="display:none;padding-left:15px;overflow:auto;max-height:120px">
+                <div id="defaultDisclaimerDiv" style="">
+                    <div id="defaultLangOptions" style="margin-top: 10px;">
+                        <span id="defLang">Choose your default language :</span>
+                        <select id="defaultLanguage"><option value="0">-- Select --</option><option value="1">English</option><option value="2">Hindi</option></select>
+                        <br><span class="highlightText" id="multiLangInstru">Please note all questions will appear in your default language. This language can be changed for a particular question later on.</span>
+                    </div>
+
+                    <br>
+                    <label class="" id="highlightDisclaimer" style="line-height:16px;margin-bottom: 0;padding-left: 0;">
+					<span style=" vertical-align:top"><input type="checkbox" id="disclaimer" onclick="linkDisp();" style="margin-top:2px;float:left">   </span>
+							<span style="width: 98%; display: block; margin-left: 1.5em;" id="agreementMessageDef"><span style="" class="cusInstText1">I have read and understood the instructions. All computer hardware allotted to me are in proper working condition. I declare  that I am not in possession of / not wearing / not  carrying any prohibited gadget like mobile phone, bluetooth  devices  etc. /any prohibited material with me into the Examination Hall.I agree that in case of not adhering to the instructions, I shall be liable to be debarred from this Test and/or to disciplinary action, which may include ban from future Tests / Examinations</span><span style="width:90%:float:left;display:none;" class="cusInstText2">मैंने निर्देश पढ़ लिया है और समझ लिया है। मुझे आवंटित किए गए सभी कंप्यूटर हार्डवेयर उचित कार्यशील स्थिति में हैं। मैं घोषणा करता / करती हूं कि मैं मोबाइल फोन, ब्लूटूथ डिवाइस आदि जैसे किसी प्रतिबंधित मोबाइल गैजेट को नहीं पहनने / न रखने / परीक्षा हॉल में मेरे साथ कोई निषिद्ध सामग्री नहीं ले रहा हूं। मैं मानता हूं कि निर्देशों का पालन न करने के मामले में, मैं इस टेस्ट और / या अनुशासनात्मक कार्यवाही से वंचित होने के लिए उत्तरदायी होगा, जिसमें भावी टेस्ट / परीक्षाओं से प्रतिबंध शामिल हो सकता है।</span></span><span style="width:98%;display:none;margin-left: 1.5em;" id="agreementMessageCustom"></span>
+					</label>
+
+                    <br>
+                </div>
+
+            </div>
+            <div class="btnsection" align="center" style="padding:13px">
+                <a class="btn btn-primary" onclick="showInstr()" id="PreviousInst" style="display:none; line-height: 38px;"><strong><img id="imgdetails1" src="images/Backward-25.png" width="25" height="18"><span id="previousbtn"> Previous</span></strong></a>
+                <a id="readylink" alt="" disabled="disabled" onclick="readyToBegin()" class="btn btn-primary btn-primary-blue" style="display:none;font-size:12px; line-height: 38px;">I am ready to begin</a>
+            </div>
+        </div>
+        <div id="mainright" style="border-left: 1px solid rgb(0, 0, 0); width: 20%; height: 607px;">
+            <div style="position:relative;padding:20px">
+                <center><img class="candidateImg" style="height:100px;width:100px" src="images/NewCandidateImage.jpg"> </center>
+            </div>
+            <div id="name" class="candOriginalName" style="font-size: 20px; color: rgb(79, 104, 135); font-weight: bold; text-align: center;">Vishwanath Virku</div>
+            <div class="bluebg"></div>
+        </div>
+    </div>
+    <script>
+        $('a').mousedown(function(event) {
+            avoidKeyPressing(event);
+        });
+        $(function() {
+            $("#instPaginationa").hover(function() {
+                $("#imgdetails").attr("src", "images/Forward-25-hover.png");
+            }, function() {
+                $("#imgdetails").attr("src", "images/Forward-25.png");
+            });
+        });
+        $(function() {
+            $("#PreviousInst").hover(function() {
+                $("#imgdetails1").attr("src", "images/Backward-25-hover.png");
+            }, function() {
+                $("#imgdetails1").attr("src", "images/Backward-25.png");
+            });
+        });
+    </script>
+    <div id="footer">
+        <center>
+            <div id="VersionNo">Version 2.3</div>
+        </center>
+        <div class="clear"></div>
+    </div>
+    <div class="overlay" style="display:none;"></div>
+    <div class="confrmPopup" id="InfoPopup">
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info"><span id="infoInstructions">Info</span></div>
+            <a class="fRight popClose">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <img src="images/info.gif" style="vertical-align: middle; margin-right: 10px;" class="info-icon" /><span id="infoMsg2" class="info-lbl"></span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a class="greenBtn cnfPopNo Ok" id="okButton">Ok</a>
+        </div>
+    </div>
+    <input type="hidden" id="defaultLang" value="" />
+</body>
+
+</html>

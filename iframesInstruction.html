@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html lang="en" class="ie ie8"><![endif]-->
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="css/aecInstructions.css" />
+<script type="text/javascript" src="js/jquery-1.8.0.min.js"></script>
+</head>
+<!-- validateIndexPageURL(); Deleted by Boddu Rakesh-->
+<body>
+	<div id="firstPage" style="overflow: hidden; padding-left: 13px">
+		<span style="float: right; display: none; padding: 2px;"><span class="viewIn">View In : </span>&nbsp;<select id="basInst" onchange="parent.changeSysInst(this.value,'sysInstText','cusInstText')"></select></span>
+	</div>
+
+	<div id="secondPagep1" style="overflow: hidden; display: none; padding-left: 8px">
+		<center>
+			<span id="otherImpInstru" style="display: none"><b><font size="4em" color="#2F72B7" class="otherInstruLabel">Other Important Instructions</font></b></span>
+		</center>
+		<br> <span id="secondPageLangView" style="float: right; display: none; padding: 2px;"><span class="viewIn">View In : </span>&nbsp;<select id="cusInst" onchange="parent.changeSysInst(this.value,'cusInstText','sysInstText')"></select></span>
+	</div>
+
+</body>
+</html>

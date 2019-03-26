@@ -1,0 +1,2821 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+    <title></title>
+    <!--CSS for protactor-->
+    <link rel="stylesheet" type="text/css" href="skin/blue.monday/jplayer.blue.monday.css" />
+    <script>
+        var isUsefullDataMedia = false;
+        var date = new Date();
+        var isTextHighlighterEnabled = false;
+        var jsVersion = date.getTime();
+        document.write('<link rel="stylesheet" type="text/css" href="css/mock_style.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" href="css/jquery.freetrans.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" href="css/jquery.ui.rotatable.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link type="text/css" rel="stylesheet" href="css/calc.css?v=' + jsVersion + '"\/\>');
+        document.write('<link type="text/css" rel="stylesheet" href="css/screen.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link type="text/css" rel="stylesheet" href="css/scratchpad.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" href="css/nanoscroller.css?v=' + jsVersion + '"\/\>');
+        document.write('<link rel="stylesheet"  type="text/css" media="all" href="css/style.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" type="text/css"  href="css/thickbox.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" type="text/css" href="css/jquery.alerts.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" type="text/css" href="css/aecInstructions.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" type="text/css" href="css/codemirror.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" type="text/css" href="css/keyboard_style.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" type="text/css" href="css/jquery.jqzoom.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" type="text/css" href="css/jcarousel.connected-carousels.css?v=' + jsVersion + '"\/\>');
+        // document.write('<link rel="stylesheet" type="text/css" href="css/popupwindow.css?v=' + jsVersion + '"\/\>');
+        document.write('<link href="css/AnalysisReport/css/font-awesome.min.css?v=' + jsVersion + '" rel="stylesheet"/>');
+
+        document.write('<script type="text/javascript" src="js/jquery-1.8.0.min.js?v=' + jsVersion + '"\><\/script>');
+        document.write('<script type="text/javascript" src="js/jquery.cookie.js?v=' + jsVersion + '"\><\/script>');
+
+        // document.write('<script type="text/javascript" src="js/popupwindow.js?v=' + jsVersion + '"\><\/script>');
+    </script>
+    <!--[if IE]><script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
+    <!--[if IE]><script type="text/javascript" src="js/jQueryRotate.js"></script><![endif]-->
+    <!--[if IE]><script type="text/javascript" src="js/raphael.js"></script><![endif]-->
+    <!--[if IE 8 ]><html class="ie ie8 no-js" lang="en"> <![endif]-->
+    <!--[if IE 9 ]><html class="ie ie9 no-js" lang="en"> <![endif]-->
+
+    <script>
+        // $('a').mousedown(function(event) {
+        //     avoidKeyPressing(event);
+        // });
+        var editor;
+
+        /*	$( document ).ready(function() {
+        		var url = document.URL;
+        		var orgId = "";
+        		var mockId = "";
+        		if(url.indexOf("quiz.html?") >= 0){
+        		var params = url.split("quiz.html?");
+        		 orgId =  $.trim(params[1]).split("@@")[0];
+        		 mockId = $.trim(params[1]).split("@@")[1];
+        		} else {
+        			orgId = $.cookie("orgId");
+        			mockId = $.cookie("assessmentId");
+        		}
+        		
+        		if(mockId.indexOf("M")==-1){
+        			var attemptNo = $.cookie("attemptId");
+        			var candMasterId = $.cookie("cand_master_id");
+        			saveSysConfig(orgId,mockId,candMasterId,attemptNo);
+        		}
+        	});*/
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.UsefulInfo').click(function(e) {
+                e.preventDefault();
+                $('#modal-content').popUpWindow({
+                    action: "open", // open or close
+                    modal: true, // modal mode
+                    size: "large" // large, medium or large
+                });
+            });
+            if (document.addEventListener) {
+                document.addEventListener('webkitfullscreenchange', exitHandler, false);
+                document.addEventListener('mozfullscreenchange', exitHandler, false);
+                document.addEventListener('fullscreenchange', exitHandler, false);
+                document.addEventListener('MSFullscreenChange', exitHandler, false);
+            }
+
+            function exitHandler() {
+                if (document.webkitIsFullScreen === false) {
+                    resetCarousel();
+                } else if (document.mozFullScreen === false) {
+                    resetCarousel();
+                } else if (document.msFullscreenElement === false) {
+                    resetCarousel();
+                }
+            }
+
+            function resetCarousel() {
+                /* if($(window).width()> 768){
+                	$('#pop-up').css('top','64px').css('left','50%').css('margin-left','-350px').css('max-width','700px').css('width','90%');
+                	$('.connected-carousels').css('padding','20px 0px 15px');
+                	$('.pop-up-content').css('padding','24px');
+                	$('#stage').css('width', '620px');
+                }
+                else if($(window).width()< 768){
+                	$('#stage').css('width', 'auto');
+                } */
+                /*$('.connected-carousels .prev-stage, .connected-carousels .next-stage').css('height','410px');*/
+
+                $('.carousel-stage').css('height', '400px');
+                $('.connected-carousels .prev-stage, .connected-carousels .next-stage').removeClass('fullsn');
+                $('.connected-carousels ul li img').css('height', '400px').css('width', '600px');
+                $('#stage .pop-up-close-triggerfull').remove(); ///fire your event
+                $('.maximizeicon, .pop-up-header, .connected-carousels .navigation, .pop-up-close-trigger').show();
+                if (hasNavigationBar) {
+                    $('.navigation').show();
+                } else {
+                    $('.navigation').hide();
+                }
+                if (isUsefullDataMedia) {
+                    $('.maximizeicon').hide();
+                } else {
+                    $('.maximizeicon').show();
+
+                }
+            }
+            $(document).on('click', '.pop-up-close-triggerfull', function() {
+                var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+                if (isSafari) {
+                    $(document).on('click', '.pop-up-close-triggerfull', function() {
+                        alert("Safari browser detected");
+                        $('.pop-up-background pop-up-background-modal').css('display', 'none');
+                        $('.carousel').remove();
+                        $('.pop-up-header').remove();
+                        $('.pop-up-content').remove();
+                        $('.pop-up').remove();
+                        $('.connected-carousels').remove();
+                    });
+                }
+                $(".headergrup").removeClass("fullzoom");
+                $(".btntab").removeClass("fullzoom");
+                $(".Rght_Section").removeClass("fullzoom");
+                $(".profile-grouping-section").removeClass("fullzoom");
+                $(".questiontype-markpanel").removeClass("fullzoom");
+                $("#Questn_Innr_Div_section").removeClass("fullzoom");
+                $(".buttons-div").removeClass("fullzoom");
+                $("#footer").removeClass("fullzoom");
+                $(".Ans_Area").removeClass("zoomscreen");
+                /* To exit Full Screen */
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else {
+                    var shell = new ActiveXObject("WScript.Shell");
+                    shell.SendKeys("{F11}");
+                }
+                $(".maximizeicon").show();
+                resetCarousel();
+                $(".connected-carousels .carousel li img").removeClass("fullzoomimg");
+            });
+        });
+        $(document).ready(function() {
+            var btn = document.getElementsByClassName('maximizeicon');
+            $('.maximizeicon').on('click', function() {
+                var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+                var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+                if (isSafari) {
+                    $('.pop-up-close-triggerfull').css('visibility', 'hidden');
+                    $('.pop-up-header').css('visibility', 'hidden');
+                    $('.pop-up-close-trigger').css('margin-top', '30px');
+                    $('.pop-up-close-trigger').css('margin-right', '10px');
+                    $('.pop-up-close-trigger').css('background-color', 'black');
+                    $('.navigation').css('visibility', 'hidden');
+                    $('.prev').css('margin-left', '-20px');
+                    $('.next').css('margin-right', '-20px');
+                    if ($(window).width() < 769) {
+                        $('.connected-carousels ul li img').height(auto);
+                    }
+                    if ($(window).width() < 381) {
+                        $('.connected-carousels img').height(auto);
+                    }
+                }
+            });
+        });
+    </script>
+    <style>
+        .connected-carousels .carousel-navigation li {
+            display: inline-block;
+            padding: 0px 10px;
+            line-height: 2.2em;
+            border: 1px #cbcbcb solid;
+            color: #999999;
+            margin: 0px 5px;
+            font-size: 12px
+        }
+        
+        .connected-carousels .carousel-navigation li.active {
+            background: #72a6fb;
+            color: #fff;
+            border: 1px #72a6fb solid;
+        }
+        
+        .maximizeicon {
+            display: inline-block;
+            position: absolute;
+            right: 35px;
+            top: 15px;
+            cursor: pointer;
+            background-attachment: scroll;
+            background-clip: border-box;
+            background-color: rgba(0, 0, 0, 0);
+            background-image: url("images/Icon-sprite.png");
+            background-origin: padding-box;
+            background-position-x: -306px;
+            background-position-y: -75px;
+            background-repeat: no-repeat;
+            background-size: auto auto;
+            cursor: pointer;
+            height: 20px;
+            width: 22px;
+            margin: 0px auto;
+            padding: 0px 8px;
+            line-height: 1em;
+        }
+        
+        .connected-carousels img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .pop-up-close-triggerfull {
+            background-image: url(images/fullcross.png) !important;
+            background-repeat: no-repeat;
+            position: absolute;
+            right: 35px;
+            top: 4%;
+            width: 32px !important;
+            height: 34px !important;
+            z-index: 10000000000;
+            cursor: pointer;
+            outline: none !important
+        }
+        
+        .pop-up-close-trigger {
+            background-image: url(images/menuclose.png) !important;
+            background-repeat: no-repeat;
+            width: 18px !important;
+            height: 18px !important;
+            outline: none !important;
+            z-index: 10000000000;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<!-- onselectstart -->
+<!-- onload="isAssessmentMock();" -->
+
+<body onselectstart="isOnSelectStart();">
+
+    <div id="wrapper">
+        <!-- <div id="pWait"
+			style="background: grey; height: 100%; width: 100%; z-index: 1999; position: absolute; opacity: 0.99; filter: alpha(opacity = 85);">
+			<div style="top: 45%; position: relative; color: white">
+				<center>
+					<img src="images/busy4.gif"
+						style="padding: '32px 0 0 36px', width:'320px', height:'110px', margin:'0 0 0 10% display:block;" /><br><span class="processing">Processing</span>
+				</center>
+			</div>
+		</div> -->
+        <div id="recordingUploadLoader" style="/*background: grey;*/ height: 100%; width: 100%; z-index: 1999; position: absolute; opacity: 0.99; filter: alpha(opacity = 85); display: none;">
+            <div style="top: 45%; position: relative; color: white">
+                <center>
+                    <img src="images/busy4.gif" style="padding: '32px 0 0 36px', width:'320px', height:'110px', margin:'0 0 0 10% display:block;" /><br>
+                    <span id="progressBar">Uploading</span>
+                </center>
+            </div>
+        </div>
+        <div id="minwidth">
+            <!-- Hamburger Contents -->
+            <div class="canvasmenu">
+                <div class="hamburgerBar canvas">
+                    <i class="hamicon hamclose"></i>
+                </div>
+                <div class="menu_title">
+                    <span class="selection"> Your Selection </span>
+
+                    <ul class="user_select">
+                        <!--li>
+                                <div class="menubx grupbx">
+                                	<i class="gb"></i>
+                                	<span>GROUP</span>
+                                </div>
+                                </li -->
+
+                        <li>
+                            <div class="menubx userbx selected">
+                                <i class="gb"></i> <span>PROFILE</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="menubx morebx">
+                                <i class="mp"></i> <span>MORE</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="menu_descp">
+
+                    <div class="sections section1" style="display: block">
+
+                        <div class="pic_box">
+                            <div class="pics pic1">
+                                <img class="candidateImg" width="94" height="101" />
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="user_dtls">
+                            <div class="details mockLoginIdSpan" style="display: none">
+                                <span class="loginName"></span> <span class="mockCandId">11111</span>
+                            </div>
+
+                            <div class="details assessmentCandidateIdSpan" style="display: none">
+                                <span class="CandidateIdText"></span> <span class="candId"></span>
+                            </div>
+
+                            <div class="details">
+                                <span class="candName"></span> <span class="candOrigName"></span>
+                            </div>
+
+
+                            <!-- <div class="details DOBSpan" style="display: none">
+								<span class="dobText"></span> <span class="dob"></span>
+							</div> -->
+
+                            <div class="details LoginIdSpan" style="display: none">
+                                <span class="loginIdText"></span> <span class="loginId"></span>
+                            </div>
+
+                            <div class="details EmailIdSpan" style="display: none">
+                                <span class="emailIdText">Email Id</span> <span class="emailId"></span>
+                            </div>
+
+                            <!-- <div class="details ContactNumSpan" style="display: none">
+								<span class="contactNoText"></span> <span class="contactNo"></span>
+							</div> -->
+
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="sections section2">
+
+                        <div class="moresections ques viewquestion_div auditlogButton" onclick="showQP()" id="viewQPButtonMbl">
+                            <span> Question Paper </span>
+                        </div>
+
+                        <div class="moresections instr auditlogButton" onclick="showInstruction()" id="VIMbl">
+                            <span> View Instruction </span>
+                        </div>
+
+                        <div class="moresections info usefulDataDiv auditlogButton" onclick="showHelpContent(event);" style="display: none" id="usefulDataMbl">
+                            <span> Useful Data </span>
+                        </div>
+                        <div class="moresections auditlogButton preGrpInst" id="viewGrpInstruDiv" onclick="showGrpInstructionsQuiz(event);" style="display: none">
+                            <span> Group Instructions </span>
+                        </div>
+
+
+                        <div class="lang multilingualDropdown" style="display: none">
+                            <span id="mLangName"> </span> <i class=""></i>
+                        </div>
+
+
+                        <div class="langselect"></div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <!-- Hamburger Contents -->
+            <div class="headergrup">
+                <div id="header">
+
+                    <div align="left" id="bannerImage" style="float: left">
+                        <div id="bannerImg" style="float: left"><img height="49px" src="./per/g21/pub/1831/ASM/OnlineAssessment/M1/banner.png?v=1542800626415"></div>
+                        <div id="bannerText" align="center" style="margin-top: 10px; font-weight: bold;">
+                            <font size="4" color="#ffffff"></font>
+                        </div>
+                    </div>
+                    <div class="hamburgerBar">
+                        <i class="hamicon"></i>
+                    </div>
+
+                </div>
+
+                <div id="sub-header">
+                    <div class="exam_name">
+                        <span class="test-header"></span>
+                    </div>
+                    <div class="helpinstruction_div">
+                        <div class="viewGrpInstruDiv" title="">
+                            <span class="instruction_icon"> </span><a class="test-instruct thickbox" onclick="showGrpInstructionsQuiz();activeLink('viewGrpInstru');"><span
+								 class="auditlogButton preGrpInst">Group Instructions</span></a>
+                        </div>
+                        <div class="help_div usefulDataDiv" id="usefulDataDiv" style="display: none;">
+                            <span class="help_icon"></span><a class="test-instruct" onclick="showHelpContent(event);"><span
+								class="auditlogButton UF" id="usefulData">Useful Data</span></a>
+                        </div>
+                        <div class="instruction_div" title="">
+                            <span class="instruction_icon"> </span><a class="test-instruct thickbox" onclick="activeLink('VI')"><span
+								id="VI" class="auditlogButton">View Instruction</span></a>
+                        </div>
+                        <div class="viewquestion_div" id="viewQPTD">
+                            <span class="questionpaper_icon"></span><a class="test-instruct thickbox" onclick="showQP();activeLink('viewQPButton')"><span
+								id="viewQPButton" class="auditlogButton"
+								title="View Entire Question Paper">Question Paper</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub header Tab-->
+
+                <div class="subheader_tab">
+
+
+                    <div class="grupname1 grups" id="groupsResp"></div>
+
+                    <div class="grupname2 grups" id="secResp">
+                        <div class="grup_head">
+                            <div class="astrk"> * </div>PHY SEC 1
+                            <div class="arw_drpdown"></div>
+                        </div><i class="bx_arrow" style="display: none;"></i>
+                        <div class="grupbox2" style="display: none;">
+                            <div class="subbox">
+                                <div class="subjects" id="sResp0">PHY SEC 1</div>
+                                <div class="subjects" id="sResp1">PHY SEC 2</div>
+                                <div class="subjects" id="sResp2">PHY SEC 3</div>
+                                <div class="subjects" id="sResp3">CHEM SEC 1</div>
+                                <div class="subjects" id="sResp4">CHEM SEC 2</div>
+                                <div class="subjects" id="sResp5">CHEM SEC 3</div>
+                                <div class="subjects" id="sResp6">MATH SEC 1</div>
+                                <div class="subjects" id="sResp7">MATH SEC 2</div>
+                                <div class="subjects" id="sResp8">MATH SEC 3</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hamburgerBar">
+                        <i class="hamicon"></i>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="grup_components">
+                    <div class="" id="mKeybrdLayt"></div>
+                    <div class="panel_time time-details" id="timeResp"></div>
+
+                    <div class="panel_icons_sm">
+                        <div class="piconsm_5 picons textarea-icon-container" title="Notepad" style="display: none;"></div>
+                        <div class="piconsm_6 picons scratchpad-icon-container" title="Scratchpad" style="display: none;"></div>
+                        <div class="piconsm_2 picons ruler-icon-container" title="Ruler" style="display: none;"></div>
+                        <div class="piconsm_3 picons protactor-icon-container" title="Protractor" style="display: none;"></div>
+                        <div class="piconsm_7 picons zoomin-icon-container" title="ZoomIn" style="display: none;"></div>
+                        <div class="piconsm_4 picons zoomout-icon-container" title="ZoomOut" style="display: none;"></div>
+                        <div class="piconsm_1 picons calculator-icon-container" title="calculator" onclick="loadCalculator()" style="display: none;"></div>
+                        <div class="clear"></div>
+                    </div>
+
+                    <div class="picons_scroll">
+                        <div class="icncont">
+                            <span class="calc_icon iconholder"></span> <i class="smicon"></i>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="piconsscroll_box">
+
+                            <div class="scroll_bars calculator-icon-container" onclick="loadCalculator()" style="display: none">
+                                <div class="sel_icon"></div>
+                                <span class="calc_icon"></span>Calculator
+                            </div>
+                            <div class="scroll_bars ruler-icon-container" style="display: none">
+                                <div class="sel_icon"></div>
+                                <span class="scale_icon"></span>Scale
+                            </div>
+                            <div class="scroll_bars protactor-icon-container" style="display: none">
+                                <div class="sel_icon"></div>
+                                <span class="protector_icon"></span>Protractor
+                            </div>
+                            <div class="scroll_bars zoomin-icon-container" style="width: 160px; display: none">
+                                <div class="sel_icon"></div>
+                                <span class="zoom_icon "></span>Zoom In
+                            </div>
+                            <div class="scroll_bars zoomout-icon-container" style="width: 160px; display: none">
+                                <div class="sel_icon"></div>
+                                <span class="zoomOut_icon"></span>Zoom Out
+                            </div>
+                            <div class="scroll_bars textarea-icon-container" style="display: none">
+                                <div class="sel_icon"></div>
+                                <span class="note_icon"></span>Note
+                            </div>
+                            <div class="scroll_bars scratchpad-icon-container" style="display: none">
+                                <div class="sel_icon"></div>
+                                <span class="draw_icon "></span>Draw
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <!-- Question Panel with Question Nos.-->
+                <div class="q_tab question_area">
+                    <div class="qarea_resp"></div>
+
+                    <div class="stngsection">
+                        <div class="setngico">
+                            <i class="seticon"></i>
+                        </div>
+                        <i class="setng_arrow"></i>
+                        <div class="setngbx">
+                            <div class="mrks_info" id="resp_mrks_info">
+
+                                <div class="clear"></div>
+                            </div>
+
+                            <div class="filter_section">
+
+
+
+                                <div class="filter_descp clear">
+                                    <div class="fltrs">
+                                        <div class="answered sm_bxes answeredCount"></div>
+                                        <div class="type_title answeredLabel"></div>
+                                        <div class="clear"></div>
+                                    </div>
+
+                                    <div class="fltrs">
+                                        <div class="nt_answered sm_bxes notAnsweredCount"></div>
+                                        <div class="type_title notAnsweredLabel"></div>
+                                        <div class="clear"></div>
+                                    </div>
+
+                                    <div class="fltrs mNotVisited">
+                                        <div class="nt_visit sm_bxes notVisitedCount"></div>
+                                        <div class="type_title notVisitedLabel"></div>
+                                        <div class="clear"></div>
+                                    </div>
+
+                                    <div class="fltrs mMarkReview MarkForReviewDiv">
+                                        <div class="mfr sm_bxes markedCount"></div>
+                                        <div class="type_title markedLabel"></div>
+                                        <div class="clear"></div>
+                                    </div>
+
+                                    <div class="fltrs review_answer mReviewAnswered">
+                                        <div class="mfr_ans_eval sm_bxes markedAnsweredCount"></div>
+                                        <div class="type_title markedAndAnsweredLabel"></div>
+                                        <div class="clear"></div>
+                                    </div>
+
+                                    <div class="fltrs review_mark mReviewMarked">
+                                        <div class="mfr_ans sm_bxes markedReviewCount"></div>
+                                        <div class="type_title markedAndAnsweredLabel"></div>
+                                        <div class="clear"></div>
+                                    </div>
+
+
+                                    <div class="clear"></div>
+
+                                </div>
+
+                                <div class="clear"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="clear"></div>
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="clear"></div>
+
+
+            <!-- header ends-->
+
+            <!--Container starts-->
+            <div class="Container">
+                <!--Center Container Starts-->
+                <div id="questionContent">
+                    <div class="profile-grouping-section">
+                        <div class="Rght_Section column" id="col2" style="">
+                            <div id="User_Hldr" onclick="showProfile();">
+                                <div class="singleImageDiv">
+                                    <div class="profile_image">
+                                        <img width="94" height="101" align="absmiddle" class="candidateImg" src="images/NewCandidateImage.jpg">
+                                    </div>
+                                    <div class="profile_details">
+                                        <div id="Username" class="candOriginalName" title=""></div>
+                                        <!--<div id="viewProButton"><a id = "VPT" class="viewProfile auditlogButton thickbox" onclick="showModule('profileDiv');activeLink(this.id)">View Profile</a></div>-->
+
+                                    </div>
+                                </div>
+                                <div class="verificationImagesDiv" style="display:none;">
+                                    <div class="leftImage" style="float:left">
+                                        <img width="94" height="85" align="absmiddle" class="candidateImg" src="images/NewCandidateImage.jpg">
+                                    </div>
+                                    <div class="rightImage" style="float:right;position: fixed;right: 60px;">
+                                        <img width="94" height="85" align="absmiddle" class="verifiedImg">
+                                    </div>
+                                    <div id="Username" class="candOriginalName" title=""></div>
+                                </div>
+                                <div class="clear"></div>
+
+                            </div>
+                        </div>
+                        <div class="Lft_Section column" id="col1" style="">
+                            <div class="nav-container">
+
+                                <div class="group-panel">
+                                    <div class="group-arrow-left-disabled"></div>
+                                    <div id="groups">
+                                        <div>
+                                            <div class="allSections currentSectionSelected" id="g0" data-normgrpsec="true" title="Sections"><span style="vertical-align:middle">Sections<span><a class="tooltip1 tooltipSelected1"> <div class="subject_instruction_icon1"></div><div class="subject_information_div1" style="margin-top:5px;"><div class="subject_name" style="text-align:left"><div><span><b>Sections</b></span></div>
+                                        </div>
+                                        <div class="notation_type_description diff_type_notation_area_inner" style="background:#e5f6fc none repeat scroll 0 0;text-align:left;">
+                                            <div class="notation_typeDiv" title="Answered"><span><span class="answered">0</span></span><span class="type_title grpAnswered" style="text-align:left">Answered</span></div>
+                                            <div class="notation_typeDiv" title="Not Answered"><span><span class="not_answered">4</span></span><span class="type_title grpNotAnswered" style="text-align:left">Not Answered</span></div>
+                                            <div class="notation_typeDiv" title="Not Visited"><span><span class="not_visited">50</span></span><span class="type_title grpNotAttempted" style="text-align:left">Not Visited</span></div>
+                                            <div class="notation_typeDiv" title="Marked for Review"><span><span class="review">0</span></span><span class="type_title grpMarkReview" style="text-align:left">Marked for Review</span></div>
+                                            <div class="notation_typeDiv" title="Answered &amp; Marked for Review (will be considered for evaluation)"><span><span class="review_answered">0</span></span><span class="type_title grpMarkedAndAnswered" style="text-align:left">Answered &amp; Marked for Review (will be considered for evaluation)</span></div>
+                                        </div>
+                                    </div>
+                                    </a>
+                                    </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group-panel-mobile">
+                        <div class="group-arrow-right-disabled"></div>
+                    </div>
+                    <div class="components-section">
+                        <div class="group-arrow-right-disabled"></div>
+
+                        <div class="component-icon-container textarea-icon-container" style="display: none;" title="NotePad">
+                            <div align="center">
+                                <span class="icon-1"></span>
+                            </div>
+                        </div>
+                        <div class="component-icon-container scratchpad-icon-container" style="display: none;" title="Scratch Pad">
+                            <div align="center">
+                                <span class="icon-2"></span>
+                            </div>
+                        </div>
+                        <div class="component-icon-container ruler-icon-container" style="display: none;" title="Ruler">
+                            <div align="center">
+                                <span class="icon-3"></span>
+                            </div>
+                        </div>
+                        <div class="component-icon-container protactor-icon-container" style="display: none;" title="Protractor">
+                            <div align="center">
+                                <span class="icon-4"></span>
+                            </div>
+                        </div>
+                        <div class="component-icon-container selectmark_tool tooltipstered" style="display: none;" title="Text Highlighter">
+                            <div align="center">
+                                <span class="selectmark"></span>
+                            </div>
+                        </div>
+                        <div class="component-icon-container zoom-icon-container" title="Zoom" style="display: none;">
+                            <div align="center">
+                                <span class="icon-5"></span>
+                            </div>
+                        </div>
+                        <div class="component-icon-container zoomin-icon-container" style="display: none;" title="Zoom In">
+                            <div align="center" class="zoominCursor">
+                                <span class="icon-6"></span>
+                            </div>
+                        </div>
+                        <div class="component-icon-container zoomout-icon-container" style="display: none;" title="Zoom Out">
+                            <div align="center" class="zoomoutCursor disableCursor">
+                                <span class="icon-9"></span>
+                            </div>
+                        </div>
+                        <div class="component-icon-container calculator-icon-container" onclick="loadCalculator()" style="display: none;" title="Calculator">
+                            <div align="center">
+                                <span class="icon-0"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-timepanel">
+                    <div class="section-details" id="sectionsField">
+                        <span class="sect">Section</span><span id="showOptionalSecSummary" style="display: none">[Attempt any <span id="maxOptSec"></span>&nbsp;of the <span id="noOptSec"></span>&nbsp;optional sections.Please click on the Check Box to
+                        attempt the section]</span>
+                    </div>
+                    <div class="time-details">
+                        <div id="showTime" style="float: right;"><b>Time Left :<span id="timeInMins">122:46</span></b></div>
+                    </div>
+                </div>
+                <div class="subject-selection">
+                    <div class="subject-arrow-left-disabled"></div>
+                    <div id="sections">
+                        <div class="subject-name selectedsubject" id="s0" title="PHY SEC 1"><span style="vertical-align:middle">PHY SEC 1</span>
+                            <a class="tooltip1 tooltipSelected1">
+                                <div class="subject_instruction_icon1" id="icon0"></div>
+                                <div class="subject_information_div1">
+                                    <div>
+                                        <div class="subject_name" style="text-align:left">PHY SEC 1</div>
+                                    </div>
+                                    <div class="notation_type_description diff_type_notation_area_inner" style="background:#e5f6fc none repeat scroll 0 0;text-align:left">
+                                        <div class="notation_typeDiv" title="Answered"><span class="answered">0</span><span class="type_title secAnswered" style="text-align:left">Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Answered"><span class="not_answered">3</span><span class="type_title secNotAnswered" style="text-align:left">Not Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Visited"><span class="not_visited">3</span><span class="type_title secNotAttempted" style="text-align:left">Not Visited</span></div>
+                                        <div class="notation_typeDiv" title="Marked for Review"><span class="review">0</span><span class="type_title secMarkReview" style="text-align:left">Marked for Review</span></div>
+                                        <div class="notation_typeDiv review_answer" id="" title="Answered &amp; Marked for Review (will be considered for evaluation)"><span class="review_answered">0</span><span class="type_title secMarkedAndAnswered" style="text-align:left">Answered &amp; Marked for Review (will be considered for evaluation) </span></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="subject-name" id="s1" title="PHY SEC 2"><span style="vertical-align:middle">PHY SEC 2</span>
+                            <a class="tooltip1">
+                                <div class="subject_instruction_icon1" id="icon1"></div>
+                                <div class="subject_information_div1">
+                                    <div>
+                                        <div class="subject_name" style="text-align:left">PHY SEC 2</div>
+                                    </div>
+                                    <div class="notation_type_description diff_type_notation_area_inner" style="background:#e5f6fc none repeat scroll 0 0;text-align:left">
+                                        <div class="notation_typeDiv" title="Answered"><span class="answered">0</span><span class="type_title secAnswered" style="text-align:left">Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Answered"><span class="not_answered">1</span><span class="type_title secNotAnswered" style="text-align:left">Not Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Visited"><span class="not_visited">7</span><span class="type_title secNotAttempted" style="text-align:left">Not Visited</span></div>
+                                        <div class="notation_typeDiv" title="Marked for Review"><span class="review">0</span><span class="type_title secMarkReview" style="text-align:left">Marked for Review</span></div>
+                                        <div class="notation_typeDiv review_answer" id="" title="Answered &amp; Marked for Review (will be considered for evaluation)"><span class="review_answered">0</span><span class="type_title secMarkedAndAnswered" style="text-align:left">Answered &amp; Marked for Review (will be considered for evaluation) </span></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="subject-name" id="s2" title="PHY SEC 3"><span style="vertical-align:middle">PHY SEC 3</span>
+                            <a class="tooltip1">
+                                <div class="subject_instruction_icon1" id="icon2"></div>
+                                <div class="subject_information_div1">
+                                    <div>
+                                        <div class="subject_name" style="text-align:left">PHY SEC 3</div>
+                                    </div>
+                                    <div class="notation_type_description diff_type_notation_area_inner" style="background:#e5f6fc none repeat scroll 0 0;text-align:left">
+                                        <div class="notation_typeDiv" title="Answered"><span class="answered">0</span><span class="type_title secAnswered" style="text-align:left">Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Answered"><span class="not_answered">0</span><span class="type_title secNotAnswered" style="text-align:left">Not Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Visited"><span class="not_visited">4</span><span class="type_title secNotAttempted" style="text-align:left">Not Visited</span></div>
+                                        <div class="notation_typeDiv" title="Marked for Review"><span class="review">0</span><span class="type_title secMarkReview" style="text-align:left">Marked for Review</span></div>
+                                        <div class="notation_typeDiv review_answer" id="" title="Answered &amp; Marked for Review (will be considered for evaluation)"><span class="review_answered">0</span><span class="type_title secMarkedAndAnswered" style="text-align:left">Answered &amp; Marked for Review (will be considered for evaluation) </span></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="subject-name" id="s3" title="CHEM SEC 1"><span style="vertical-align:middle">CHEM SEC 1</span>
+                            <a class="tooltip1">
+                                <div class="subject_instruction_icon1" id="icon3"></div>
+                                <div class="subject_information_div1">
+                                    <div>
+                                        <div class="subject_name" style="text-align:left">CHEM SEC 1</div>
+                                    </div>
+                                    <div class="notation_type_description diff_type_notation_area_inner" style="background:#e5f6fc none repeat scroll 0 0;text-align:left">
+                                        <div class="notation_typeDiv" title="Answered"><span class="answered">0</span><span class="type_title secAnswered" style="text-align:left">Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Answered"><span class="not_answered">0</span><span class="type_title secNotAnswered" style="text-align:left">Not Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Visited"><span class="not_visited">6</span><span class="type_title secNotAttempted" style="text-align:left">Not Visited</span></div>
+                                        <div class="notation_typeDiv" title="Marked for Review"><span class="review">0</span><span class="type_title secMarkReview" style="text-align:left">Marked for Review</span></div>
+                                        <div class="notation_typeDiv review_answer" id="" title="Answered &amp; Marked for Review (will be considered for evaluation)"><span class="review_answered">0</span><span class="type_title secMarkedAndAnswered" style="text-align:left">Answered &amp; Marked for Review (will be considered for evaluation) </span></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="subject-name" id="s4" title="CHEM SEC 2"><span style="vertical-align:middle">CHEM SEC 2</span>
+                            <a class="tooltip1">
+                                <div class="subject_instruction_icon1" id="icon4"></div>
+                                <div class="subject_information_div1">
+                                    <div>
+                                        <div class="subject_name" style="text-align:left">CHEM SEC 2</div>
+                                    </div>
+                                    <div class="notation_type_description diff_type_notation_area_inner" style="background:#e5f6fc none repeat scroll 0 0;text-align:left">
+                                        <div class="notation_typeDiv" title="Answered"><span class="answered">0</span><span class="type_title secAnswered" style="text-align:left">Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Answered"><span class="not_answered">0</span><span class="type_title secNotAnswered" style="text-align:left">Not Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Visited"><span class="not_visited">8</span><span class="type_title secNotAttempted" style="text-align:left">Not Visited</span></div>
+                                        <div class="notation_typeDiv" title="Marked for Review"><span class="review">0</span><span class="type_title secMarkReview" style="text-align:left">Marked for Review</span></div>
+                                        <div class="notation_typeDiv review_answer" id="" title="Answered &amp; Marked for Review (will be considered for evaluation)"><span class="review_answered">0</span><span class="type_title secMarkedAndAnswered" style="text-align:left">Answered &amp; Marked for Review (will be considered for evaluation) </span></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="subject-name" id="s5" title="CHEM SEC 3"><span style="vertical-align:middle">CHEM SEC 3</span>
+                            <a class="tooltip1">
+                                <div class="subject_instruction_icon1" id="icon5"></div>
+                                <div class="subject_information_div1">
+                                    <div>
+                                        <div class="subject_name" style="text-align:left">CHEM SEC 3</div>
+                                    </div>
+                                    <div class="notation_type_description diff_type_notation_area_inner" style="background:#e5f6fc none repeat scroll 0 0;text-align:left">
+                                        <div class="notation_typeDiv" title="Answered"><span class="answered">0</span><span class="type_title secAnswered" style="text-align:left">Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Answered"><span class="not_answered">0</span><span class="type_title secNotAnswered" style="text-align:left">Not Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Visited"><span class="not_visited">4</span><span class="type_title secNotAttempted" style="text-align:left">Not Visited</span></div>
+                                        <div class="notation_typeDiv" title="Marked for Review"><span class="review">0</span><span class="type_title secMarkReview" style="text-align:left">Marked for Review</span></div>
+                                        <div class="notation_typeDiv review_answer" id="" title="Answered &amp; Marked for Review (will be considered for evaluation)"><span class="review_answered">0</span><span class="type_title secMarkedAndAnswered" style="text-align:left">Answered &amp; Marked for Review (will be considered for evaluation) </span></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="subject-name" id="s6" title="MATH SEC 1"><span style="vertical-align:middle">MATH SEC 1</span>
+                            <a class="tooltip1">
+                                <div class="subject_instruction_icon1" id="icon6"></div>
+                                <div class="subject_information_div1">
+                                    <div>
+                                        <div class="subject_name" style="text-align:left">MATH SEC 1</div>
+                                    </div>
+                                    <div class="notation_type_description diff_type_notation_area_inner" style="background:#e5f6fc none repeat scroll 0 0;text-align:left">
+                                        <div class="notation_typeDiv" title="Answered"><span class="answered">0</span><span class="type_title secAnswered" style="text-align:left">Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Answered"><span class="not_answered">0</span><span class="type_title secNotAnswered" style="text-align:left">Not Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Visited"><span class="not_visited">6</span><span class="type_title secNotAttempted" style="text-align:left">Not Visited</span></div>
+                                        <div class="notation_typeDiv" title="Marked for Review"><span class="review">0</span><span class="type_title secMarkReview" style="text-align:left">Marked for Review</span></div>
+                                        <div class="notation_typeDiv review_answer" id="" title="Answered &amp; Marked for Review (will be considered for evaluation)"><span class="review_answered">0</span><span class="type_title secMarkedAndAnswered" style="text-align:left">Answered &amp; Marked for Review (will be considered for evaluation) </span></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="subject-name" id="s7" title="MATH SEC 2"><span style="vertical-align:middle">MATH SEC 2</span>
+                            <a class="tooltip1">
+                                <div class="subject_instruction_icon1" id="icon7"></div>
+                                <div class="subject_information_div1">
+                                    <div>
+                                        <div class="subject_name" style="text-align:left">MATH SEC 2</div>
+                                    </div>
+                                    <div class="notation_type_description diff_type_notation_area_inner" style="background:#e5f6fc none repeat scroll 0 0;text-align:left">
+                                        <div class="notation_typeDiv" title="Answered"><span class="answered">0</span><span class="type_title secAnswered" style="text-align:left">Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Answered"><span class="not_answered">0</span><span class="type_title secNotAnswered" style="text-align:left">Not Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Visited"><span class="not_visited">8</span><span class="type_title secNotAttempted" style="text-align:left">Not Visited</span></div>
+                                        <div class="notation_typeDiv" title="Marked for Review"><span class="review">0</span><span class="type_title secMarkReview" style="text-align:left">Marked for Review</span></div>
+                                        <div class="notation_typeDiv review_answer" id="" title="Answered &amp; Marked for Review (will be considered for evaluation)"><span class="review_answered">0</span><span class="type_title secMarkedAndAnswered" style="text-align:left">Answered &amp; Marked for Review (will be considered for evaluation) </span></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="subject-name" id="s8" title="MATH SEC 3" style="display: none;"><span style="vertical-align:middle">MATH SEC 3</span>
+                            <a class="tooltip1">
+                                <div class="subject_instruction_icon1" id="icon8"></div>
+                                <div class="subject_information_div1">
+                                    <div>
+                                        <div class="subject_name" style="text-align:left">MATH SEC 3</div>
+                                    </div>
+                                    <div class="notation_type_description diff_type_notation_area_inner" style="background:#e5f6fc none repeat scroll 0 0;text-align:left">
+                                        <div class="notation_typeDiv" title="Answered"><span class="answered">0</span><span class="type_title secAnswered" style="text-align:left">Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Answered"><span class="not_answered">0</span><span class="type_title secNotAnswered" style="text-align:left">Not Answered</span></div>
+                                        <div class="notation_typeDiv" title="Not Visited"><span class="not_visited">4</span><span class="type_title secNotAttempted" style="text-align:left">Not Visited</span></div>
+                                        <div class="notation_typeDiv" title="Marked for Review"><span class="review">0</span><span class="type_title secMarkReview" style="text-align:left">Marked for Review</span></div>
+                                        <div class="notation_typeDiv review_answer" id="" title="Answered &amp; Marked for Review (will be considered for evaluation)"><span class="review_answered">0</span><span class="type_title secMarkedAndAnswered" style="text-align:left">Answered &amp; Marked for Review (will be considered for evaluation) </span></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="subject-section-rightarrow">
+                    <div class="subject-arrow-right"></div>
+                </div>
+                <div class="clear"></div>
+
+
+            </div>
+        </div>
+
+        <div class="question_description_number_panel" id="rightDivision">
+            <div class="Rght_Section column" id="col2">
+                <div class="collapsebel_panel">
+                    <span class="collapse_icon"></span>
+                    <div class="diff_type_notation_area_outer">
+                        <div class="diff_type_notation_area_inner">
+                            <div class="notation_type_description">
+                                <div class="notation_typeDiv leftdiv_notation">
+                                    <span class="answered answeredCount" id="">0</span> <span class="type_title answeredLabel longtext-hide" id="" title="Answered">Answered</span>
+                                </div>
+                                <div class="notation_typeDiv">
+                                    <span class="not_answered notAnsweredCount" id="">3</span> <span class="type_title notAnsweredLabel longtext-hide" id="" title="Not Answered">Not Answered</span>
+                                </div>
+
+                                <div class="clear"></div>
+                                <div class="notation_typeDiv leftdiv_notation">
+                                    <span class="not_visited notVisitedCount" id="">3</span> <span class="type_title notVisitedLabel longtext-hide" id="" title="Not Visited">Not Visited</span>
+                                </div>
+                                <div class="notation_typeDiv MarkForReviewDiv">
+                                    <span class="review markedCount" id="">0</span> <span class="type_title markedLabel longtext-hide" id="" title="Marked for Review">Marked for Review</span>
+                                </div>
+
+                                <div class="clear"></div>
+                                <div class="notation_typeDiv answered_review_container review_mark" id="" style="display: none;">
+                                    <span class="review_marked markedReviewCount" id="">0</span>
+                                    <span class="type_title markedAndAnsweredLabel" id="" title="Answered &amp; Marked for Review (will be considered for evaluation)">Answered &amp; Marked for Review (will be considered for evaluation)</span>
+                                </div>
+                                <div class="notation_typeDiv answered_review_container review_answer" id="">
+                                    <span class="review_answered markedAnsweredCount" id="">0</span>
+                                    <span class="type_title markedAndAnsweredLabel" id="" title="Answered &amp; Marked for Review (will be considered for evaluation)">Answered &amp; Marked for Review (will be considered for evaluation)</span>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rightSectionDiv" id="rightSectionDiv1">
+
+                        <div class="content"></div>
+                    </div>
+                    <div class="rightSectionDiv" id="rightSectionDiv2">
+                        <div class="header">
+                            &nbsp;<span class="viewSection"><b title="PHY SEC 1">PHY SEC 1</b> </span>
+                        </div>
+                        <div class="subheader" id="chooseQuestion">Choose a Question</div>
+                        <div class="content nano has-scrollbar" id="question_area" style="height: 183px;">
+                            <div class="question_area nano-content" tabindex="0" style="right: -17px;">
+                                <div class="numberpanelQues">
+                                    <div>
+                                        <div id="qtd0"><span title="Not Answered" class="not_answered auditlog" id="0" onclick="javascript:changeQues(0);"> 1</span></div>
+                                        <div id="qtd1"><span title="Not Answered" class="not_answered auditlog" id="1" onclick="javascript:changeQues(1);"> 2</span></div>
+                                        <div id="qtd2"><span title="Not Visited" class="not_visited auditlog" id="2" onclick="javascript:changeQues(2);"> 3</span></div>
+                                        <div id="qtd3"><span title="Not Visited" class="not_visited auditlog" id="3" onclick="javascript:changeQues(3);"> 4</span></div>
+                                        <div id="qtd4"><span title="Not Visited" class="not_visited auditlog" id="4" onclick="javascript:changeQues(4);"> 5</span></div>
+                                        <div id="qtd5"><span title="Not Answered" class="not_answered auditlog" id="5" onclick="javascript:changeQues(5);"> 6</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="nano-pane" style="display: none;">
+                                <div class="nano-slider" style="height: 167px; transform: translate(0px, 0px);"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="typingInstDiv" class="rightContainerText" style="display: none; overflow: auto">
+                        <div class="viewSection">
+                            <span id="viewingSect">You are viewing</span>&nbsp;<b title="PHY SEC 1">PHY SEC 1</b>&nbsp;<span class="sect">Section</span>
+                        </div>
+                        <div id="dataDisplayDiv" style="display: none"></div>
+                        <div class="question_area1">
+                            <div class="question_area1">
+
+                                <div>
+                                    <div class="keyStrokesCount">
+                                        <span class="keyStrokesCountTd">Keystrokes Count</span><span>:</span><span class="totalKeyStrokesCount"></span>
+                                    </div>
+                                    <div class="textRight errorCount">
+                                        <span class="errorCountTd">Error Count</span><span>:</span><span class="errorCountValue">0</span>
+                                    </div>
+                                    <div class="textRight backspaceCount">
+                                        <span class="backspaceCountTd">Backspace Count</span><span>:</span><span class="backspaceCountValue"></span>
+                                    </div>
+                                    <div class="totalCount">
+                                        <span class="totalWordCount">Total Word Count</span><span>:</span><span class="totalWordCountVal"></span>
+                                    </div>
+                                    <div class="typedCount">
+                                        <span class="typedWordCount">Typed Word Count</span><span>:</span><span class="typedWordCountVal"></span>
+                                    </div>
+                                    <div class="remainingCount">
+                                        <span class="remainingWordCount textRight">Pending Word Count</span><span>:</span><span class="remainingWordCountVal"></span>
+                                    </div>
+                                </div>
+                                <br>
+                                <div id="typingInstruSpan">
+                                    <b>Instructions</b>
+                                </div>
+                                <div id="restrictedInstr" style="margin-top: 10px;">
+                                    <div>
+                                        <!-- <span style="vertical-align:top"><b>1.</b></span> -->
+                                        <span>&nbsp;</span><span id="resInstru1">Type the highlighted character to proceed further.</span>
+                                    </div>
+                                    <div>
+                                        <!-- <span style="vertical-align:top"><b>2.</b></span> -->
+                                        <span>&nbsp;</span><span id="resInstru2">You cannot edit the typed text.</span>
+                                    </div>
+                                    <div>
+                                        <!-- <span style="vertical-align:top"><b>3.</b></span> -->
+                                        <span>&nbsp;</span><span id="resInstru3">You are not allowed to submit before typing the entire text.</span>
+                                    </div>
+                                    <div>
+                                        <!-- <span style="vertical-align:top"><b>4.</b></span> -->
+                                        <span>&nbsp;</span><span id="resInstru4">On timeout, your answer will be saved automatically.</span>
+                                    </div>
+                                </div>
+                                <div id="unrestrictedInstr" style="display: none; margin-top: 10px">
+                                    <div>
+                                        <!-- <span style="vertical-align:top"><b>1.</b></span> -->
+                                        <span>&nbsp;</span><span id="unresInstru1">Type the highlighted word.</span>
+                                    </div>
+                                    <div class="unresInstru2">
+                                        <!-- <span style="vertical-align:top"><b>2.</b></span> -->
+                                        <span>&nbsp;</span><span id="unresInstru2">You can edit the typed text.</span>
+                                    </div>
+                                    <div class="unresInstru3">
+                                        <!-- <span style="vertical-align:top"><b>3.</b></span> -->
+                                        <span>&nbsp;</span><span id="unresInstru3">Correct/Wrong words turn Green/Red respectively.</span>
+                                    </div>
+                                    <div>
+                                        <!-- <span style="vertical-align:top"><b>4.</b></span> -->
+                                        <span>&nbsp;</span><span id="unresInstru4">You are not allowed to submit before typing the entire text.</span>
+                                    </div>
+                                    <div>
+                                        <!-- <span style="vertical-align:top"><b>5.</b></span> -->
+                                        <span>&nbsp;</span><span id="unresInstru5">On timeout, your answer will be saved automatically.</span>
+                                    </div>
+                                </div>
+                                <div id="stanographyInstr" style="display: none; margin-top: 10px">
+                                    <div>
+                                        <!-- <span><b>1.</b></span> -->
+                                        <span>&nbsp;</span><span id="stanographyInstr1">You can edit the typed text.</span>
+                                    </div>
+                                    <div>
+                                        <!-- <span><b>2.</b></span> -->
+                                        <span>&nbsp;</span><span id="stanographyInstr2">You are not allowed to submit before typing the entire text.</span>
+                                    </div>
+                                    <div>
+                                        <!-- <span><b>3.</b></span> -->
+                                        <span>&nbsp;</span><span id="stanographyInstr3">On timeout, your answer will be saved automatically.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+        <!--Center Container Ends-->
+        <div class="Questn_Area" id="Questn_Area">
+            <span class="expand_icon" style="display: none;"></span>
+            <!--<div class="Questn_Innr_Div " >
+	<div id="questionCont" >-->
+
+            <div id="currentQues" style="position: initial;">
+                <div class="questionTypeCont" style="height: 1px;"><span class="questiontype-details"></span></div>
+                <div id="Questn_Innr_Div_section">
+                    <div id="Subjt_Div"></div>
+                    <div id="Subdetail_Div">
+                        <div style="float:right;margin-right:5px;">
+                            <div class="chooseLang"> <span class="viewLang">View in :&nbsp;</span><select class="choose_lang auditlogSelect" onchange="changeLang(this.value)"> <option selected="selected" value="1">English</option><option value="2">Hindi</option></select></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="quesOuterDiv" style="height: auto; overflow: hidden;">
+                    <div class="leftDiv" style="width: 99.6%; height: 301px;">
+                        <div align="right" style="float:right;">
+                            <a id="scrollToBottom" title="Scroll Down" onclick="scrollToBottom()" style="display: inline;"><img width="28" height="28" align="right" alt="Scroll Down" src="images/Down.png" style=""></a>
+                        </div>
+                        <div class="divHeader"><b><span class="questionNumber">Question No</span>. 1</b></div>
+                        <div id="quesAnsContent" class="Ans_Area">
+                            <div class="textHighlighter 0_0_0_0_TextSelection 6_QuesId" style="width:98%;margin-left:5px;font-family:Arial,verdana,helvetica,sans-serif;padding-bottom:10px;padding-top:10px;"> <span class="ans"><span class="zoomimage"><a target="_blank"><img src="./per/g21/pub/1831/ASM/OnlineAssessment/M1/tkcimages/P1_SEC1_INS_E.jpg " class="max_img_ico" title="Click the Image to Zoom"></a></span></span><br>
+                                <span class="ans"><span class="zoomimage"><a target="_blank"><img src="./per/g21/pub/1831/ASM/OnlineAssessment/M1/tkcimages/P1_PHY_E_Sec1_Q6.jpg " class="max_img_ico" title="Click the Image to Zoom"></a></span></span>
+                            </div>
+                            <div style="width:100%;font-family:Arial,verdana,helvetica,sans-serif;margin-top:5px;">
+                                <div><label><span><input type="checkbox" class="answer MSQanswer" name="answers" value="2"> </span><span style="font-family:Arial,verdana,helvetica,sans-serif;width:95%;vertical-align:middle;"><span class="ans"><span class="zoomimage"><a target="_blank"><img src="./per/g21/pub/1831/ASM/OnlineAssessment/M1/tkcimages/P1_PHY_E_Sec1_Q6_O2.jpg " class="max_img_ico" title="Click the Image to Zoom"></a></span></span> </span></label><label><span><input type="checkbox" class="answer MSQanswer" name="answers" value="1"> </span><span style="font-family:Arial,verdana,helvetica,sans-serif;width:95%;vertical-align:middle;">
+                                    <span class="ans"><span class="zoomimage"><a target="_blank"><img src="./per/g21/pub/1831/ASM/OnlineAssessment/M1/tkcimages/P1_PHY_E_Sec1_Q6_O1.jpg " class="max_img_ico" title="Click the Image to Zoom"></a></span></span> </span></label><label><span><input type="checkbox" class="answer MSQanswer" name="answers" value="4"> </span><span style="font-family:Arial,verdana,helvetica,sans-serif;width:95%;vertical-align:middle;"><span class="ans"><span class="zoomimage"><a target="_blank"><img src="./per/g21/pub/1831/ASM/OnlineAssessment/M1/tkcimages/P1_PHY_E_Sec1_Q6_O4.jpg " class="max_img_ico" title="Click the Image to Zoom"></a></span></span> </span></label><label><span><input type="checkbox" class="answer MSQanswer" name="answers" value="3"> </span><span style="font-family:Arial,verdana,helvetica,sans-serif;width:95%;vertical-align:middle;"><span class="ans"><span class="zoomimage"><a target="_blank"><img src="./per/g21/pub/1831/ASM/OnlineAssessment/M1/tkcimages/P1_PHY_E_Sec1_Q6_O3.jpg " class="max_img_ico" title="Click the Image to Zoom"></a></span></span> </span></label></div>
+                            </div>
+                        </div>
+                        <div align="right" style="float:right;clear:both">
+                            <a onclick="scrollToTop()" title="Scroll Up" id="scrollToTop" style="display: inline;"><img width="30" height="30" alt="Scroll Up" style="" src="images/Up.png"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons-div">
+                <div class="Bttn_Area" id="Bttn_Area2">
+                    <div class="finalSubmit" id="submitTD " align="">
+                        <input type="button" class="btn btn-primary-blue auditlogButton" id="finalSubmit" onclick="submitConfirmation('submit')" value="Submit" title="You are not required to click on 'Submit' button ; The system will auto submit at the end" disabled="disabled">
+                    </div>
+                    <div class="save_buttoncontainer">
+
+                        <input type="button" id="reset" onclick="resetProgramming()" class="progrmngBtn btn btn-primary auditlog reset" value="Reset" style="display: none;" title="Reset"> <input type="button" id="saveProgram" onclick="fnSubmit('NEXT')"
+                            class="progrmngBtn btn btn-primary auditlogSaveAndNext auditlog saveProgram" value="Next" style="display: none" title="Next"> <input type="button" id="previousBtnGroup" onclick="fnsubmitGroupQuestion('PREVIOUS')" class=" btn btn-primary  auditlog previousBtnGroup"
+                            value="Previous" style="display: none"> <input type="button" id="previousBtn" onclick="fnSubmit('PREVIOUS')" class="btn btn-primary  auditlog previousBtn btnEnabled" value="Previous" style="display: none"> <input type="button"
+                            style="margin-left: 5px; display: none; line-height: 33px" id="savenextGroup" onclick="fnsubmitGroupQuestion('NEXT')" class="groupBtn btn btn-primary-save  btnEnabled auditlog savenextGroup" value="Save &amp; Next" title="Save &amp; Next">                        <input type="button" style="margin-left: 5px; line-height: 33px;" id="savenext" onclick="fnSubmit('NEXT')" class="normalBtn btn btn-primary-save  btnEnabled auditlog savenext" value="Save &amp; Next" title="Save &amp; Next">
+
+                    </div>
+                    <div class="other_buttoncontainer">
+                        <input type="button" onclick="fnSubmit('MARK')" id="underreview" class="normalBtn btn btn-primary auditlog underreview" value="Mark for Review &amp; Next" style="margin-left: 1%;" title="Mark for Review &amp; Next"> <input type="button"
+                            id="clearResponse" onclick="resetOption()" class="normalBtn btn btn-primary auditlog clearResponse" value="Clear Response" style="" title="Clear Response">
+                        <!-- <input type="button" id="clearResponseGroup" onclick = "cnfPop('ClearPopup')" class="groupBtn btn btn-primary auditlog clearResponseGroup" value="" style="display:none;margin-left:5px;"/>  -->
+                        <input type="button" onclick="compileCode();" id="compileCodeBtn" class="progrmngBtn btn btn-primary auditlog compileCodeBtn" value="Compile" style="display: none; margin-left: 1%" title="Compile"> <input type="button" onclick="executeCode();"
+                            id="submitCodeBtn" class="progrmngBtn btn btn-primary btn-primary-blue btnEnabled auditlog submitCodeBtn" value="Submit Code" style="display: none" title="Submit Code">
+
+                    </div>
+                    <div id="typingSubmit" class="typingSubmit" style="display: none; text-align: center;">
+                        <span id="submitTD" width="100%;"><input type="button" class="typingTestButtonDisabled btn btn-primary-blue" id="finalTypingSub" onclick="fnSubmit('NEXT');calculateEllapsedTime();submitConfirmation('submit');activeLink(this.id);" value="Submit" title="Submit Group" disabled="disabled"></span>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!--</div>
+			</div>-->
+        </div>
+        <div id="sectionSummaryDiv" style="height: 406px; display: none;"></div>
+        <div id="breakTimeDiv" style="display: none; height: 556px;" align="center">
+            <div id="breakContentDiv" style="">
+                <div id="breakTimeCountDiv">
+                    <div style="width: 100%;" id="breakTimeCounter">&nbsp;</div>
+                </div>
+                <div id="breakSummaryDiv" style="height: 90%"></div>
+            </div>
+            <div id="brkPrcdBtnDiv" class="buttonDiv">
+                <input id="proceedToNextGrp" onclick="submitGroup()" type="button" class="btn btn-primary" value="Proceed to Next Group">
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div id="instruTimeDiv" class="preGrpInstruL" style="display: none;">
+            <div class="titlepath preGrpInst">Group Instructions</div>
+            <div id="mobPreGrpInstru" class="instruTimeCounter">&nbsp;</div>
+            <div id="instruContentDiv" style="border-bottom: 1px solid rgb(195, 195, 193); overflow: auto; height: 517px;">
+                <div id="instView">
+                    <span class="viewIn">View in :</span>&nbsp; <select id="grpInst" onchange="changeGrpInst(this.value)"></select>
+                </div>
+                <div id="InstruContent" class="preGrpinstruContent"></div>
+            </div>
+            <div id="instruPrcdBtnDiv" class="buttonDiv">
+                <input id="proceedToGrp" type="button" class="btn btn-primary" value="Proceed to Next" title="Proceed to Next">
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div id="instruright" class="preGroupInstR" style="display: none; height: 556px;">
+            <div class="instruTimeCountDiv">
+                <div class="instruTimeCounter">&nbsp;</div>
+            </div>
+            <div style="height: 107px; position: relative">
+                <div style="text-align: center">
+                    <img class="candidateImg" src="images/NewCandidateImage.jpg" width="94" align="absmiddle" height="101">
+                    <div id="Username" class="candOriginalName" title=""></div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div id="loadCalc" style="display: none; position: fixed; z-index: 999; padding-top: 1%;"></div>
+    </div>
+    <div id="scoreCardDiv" style="display: none; height: 558px;" align="center">
+        <div id="scoreSummaryDiv"></div>
+        <div id="scoreCardBtnDiv" style="text-align: center;">
+            <input onclick="moveToFeedback();" id="scoreCardPrcdBtn" type="button" class="btn btn-primary" value="Proceed">
+        </div>
+        <div class="clear"></div>
+    </div>
+    <!-- Buttons for tab -->
+
+    <div class="buttons-div btntab" style="">
+        <div class="save_buttoncontainer_2">
+            <input type="button" class="btn btn-primary-blue sve_nxt  auditlogButton" onclick="submitConfirmation('submit')" value="Submit" title="Submit Group" id="finalSubmitMbl" disabled="disabled"> <input type="button" class="groupBtn btn btn-primary-blue sve_nxt lst auditlog savenextGroup btnEnabled"
+                style="display: none;" id="savenextGroupMbl" onclick="fnsubmitGroupQuestion('NEXT')" title="Save &amp; Next" value="Save &amp; Next"> <input type="button" class="progrmngBtn btn btn-primary-orange sve_nxt auditlogSaveAndNext auditlog saveProgram lst"
+                style="display: none; color: #fff" onclick="fnSubmit('NEXT')" id="saveProgramMbl"> <input type="button" class="normalBtn btn btn-primary-blue sve_nxt lst auditlog  savenext btnEnabled" id="savenextMbl" style="" onclick="fnSubmit('NEXT')" value="Save &amp; Next"
+                title="Save &amp; Next">
+            <div id="typingSubmitMbl" class="typingSubmit" style="display: none; text-align: center;">
+                <input type="button" class="btn btn-primary-blue sve_nxt lst typing auditlogButton " onclick="fnSubmit('NEXT');calculateEllapsedTime();submitConfirmation('submit');activeLink(this.id);" value="Submit" title="Submit Group" disabled="">
+            </div>
+
+        </div>
+
+        <div class="mob_save">
+            <div class="other_buttoncontainer">
+                <input type="button" class="normalBtn btn btn-primary reset-btn auditlog clearResponse" onclick="resetOption()" value="Clear Response" id="clearResponseMbl" style="margin-left: 2px; margin-right: 2px;" title="Clear Response">
+                <input type="button" class="progrmngBtn btn btn-primary reset-btn auditlog " onclick="resetProgramming()" value="Reset" style="display: none;" id="resetMbl">
+
+            </div>
+
+            <div class="save_buttoncontainer">
+                <input type="button" class="btn btn-primary skip-btn auditlog previousBtnGroup" onclick="fnsubmitGroupQuestion('PREVIOUS')" id="previousBtnGroupMbl" value="Previous" style="display: none">
+                <input type="button" class="btn btn-primary skip-btn auditlog previousBtn btnEnabled" onclick="fnSubmit('PREVIOUS')" id="previousBtnMbl" value="Previous" style="display: none"> <input type="button" class="normalBtn btn btn-primary auditlog underreview"
+                    onclick="fnSubmit('MARK')" id="underreviewMbl" value="Mark for Review &amp; Next" style="" title="Mark for Review &amp; Next"> <input type="button" class="progrmngBtn btn btn-primary reset-btn auditlog compileCodeBtn" onclick="compileCode()"
+                    value="Compile" style="display: none;" title="Compile">
+                <input type="button" class="progrmngBtn btn btn-primary  auditlog submitCodeBtn btnEnabled" onclick="executeCode()" value="Submit Code" style="display: none;" title="Submit Code">
+            </div>
+        </div>
+
+        <div class="clear"></div>
+
+    </div>
+
+    <!-- Buttons for tab -->
+    <div class="overlaymenu" style="display: none;"></div>
+    </div>
+    </div>
+    </div>
+    <!-- Container Ends---->
+    <!-- Footer Starts ---->
+    <div id="footer">
+        <center>
+            <div class="footerCopywright">
+                <!-- Copyright &copy; 2015 Tata Consultancy Services | <a href="http://www.tcsion.com/dotcom/TCSSMB/Login/terms_of_use.html" target="_blank">Terms of Use</a> | <a href="http://www.tcsion.com/dotcom/TCSSMB/Login/privacy_policy.html" target="_blank">Privacy Policy</a> |  -->
+                Version 2.3
+            </div>
+            <!-- <div class="footerTataLogo"><img src="images/tata-logo.png" /></div> -->
+        </center>
+        <div class="clear"></div>
+    </div>
+    <!-- Footer Ends ---->
+    </div>
+    <div class="clear"></div>
+
+    <!---Popup Content Starts -->
+    <div class="portlet" id="hiddenModal1" style="display: none;">
+        <div class="portlet_topper">
+            <div class="popupheader sysInstruLabel" id="Instruction1">Instruction</div>
+            <div class="arrowplace">
+                <a onclick="tb_remove();removeActiveLinks()" id="closeInstru">Close</a>
+            </div>
+        </div>
+        <div class="popup_content">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td valign="top">
+                        <div class="content" id="instructionsDiv" style="/* height: 445px; */">
+                            <div style="height: 100%; padding-top: 5px" id="quizInstruDiv">
+
+                                <!--<div id="firstPage" style="padding:2px">
+					<span style="float:right;display:none;"><span class="viewIn">View In : </span><select id="basInst" onchange="changeSysInst(this.value,'sysInstText','cusInstText')"></select></span>
+					<br/>
+					<br/>
+				</div>
+				<br/>
+				<br/>
+				<center><span><b><font size="4em" color="#2F72B7" class="otherInstruLabel">Other Important Instructions</font></b></span></center>
+				<div id="secondPagep1" style="padding:2px">
+					<span style="float:right;display:none;"><span class="viewIn">View In : </span><select id="cusInst" onchange="changeSysInst(this.value,'cusInstText','sysInstText')"></select></span>
+					<br/>
+					<br/>
+				</div>-->
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="portlet" id="hiddenModal3" style="display: none;">
+        <div class="portlet_topper">
+            <div class="popupheader" id="questionP">Question Paper</div>
+            <div class="arrowplace">
+                <a onclick="tb_remove();removeActiveLinks()" title="Close" id="questionPclose">Close</a>
+            </div>
+        </div>
+        <div class="popup_content">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td valign="top">
+                        <div class="content" id="QPDiv" style="/* height: 445px; */">
+                            <div class="viewQPDiv" style=""></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="portlet" id="hiddenModal5" style="display: none;">
+        <div class="portlet_topper">
+            <div class="popupheader preGrpInst" id="grpInstruction">Group Instructions</div>
+            <div class="arrowplace">
+                <a onclick="tb_remove();removeActiveLinks()" title="Close" class="popClose">Close</a>
+            </div>
+        </div>
+        <div class="popup_content" style="overflow: auto">
+            <div style="overflow: auto">
+                <div class="instView">
+                    <span class="viewIn">View In : </span>&nbsp; <select class="grpInst" onchange="changeGrpInst(this.value)"></select>
+                </div>
+                <div class="viewInstructionsDiv preGrpinstruContent"></div>
+            </div>
+        </div>
+    </div>
+    <!--  <div class="portlet" id="hiddenModal5" style="display: none;">
+  <div class="portlet_topper">
+    <div class="popupheader">Question Paper</div>
+    <div  class="arrowplace"><a href=# onclick="tb_remove();removeActiveLinks()">Close</a> </div>
+  </div>
+  <div class="popup_content">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td valign="top"><div class="content" id="QPDiv">
+				<div id="viewQPDiv" style="" > 
+			</div>
+				</div>
+		</td>
+      </tr>
+    </table>
+  </div>
+</div>-->
+    <div class="portlet" id="hiddenModal4" style="display: none;">
+        <div class="portlet_topper">
+            <div class="popupheader UF">Useful Info</div>
+            <div class="arrowplace">
+                <a onclick="tb_remove();removeActiveLinks()">Close</a>
+            </div>
+        </div>
+        <div class="popup_content">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td valign="top">
+                        <div class="content" id="sectionSummary" style="height: 435px;"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="portlet" id="hiddenModal2" style="display: none;">
+        <div class="portlet_topper">
+            <div class="popupheader" id="profilePop">Profile</div>
+            <div class="arrowplace">
+                <a onclick="tb_remove();removeActiveLinks()" id="profileClose">Close</a>
+            </div>
+        </div>
+        <div class="popup_content">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td valign="top">
+                        <div class="userimage">
+                            <img width="94" height="101" align="absmiddle" class="candidateImg" />
+                        </div>
+                        <div class="content" id="profileDiv">
+                            <table width="200" border="0" cellspacing="0" cellpadding="10" class="candidateDetailstbl">
+                                <tbody>
+                                    <!--<tr class="mockLoginIdSpan" style="display: none">
+										<td width="27%" align="right" id="login"
+											class="head1 loginName"></td>
+										<td align="left">:<strong> <span
+												class="mockCandId">11111</span></strong></td>
+									</tr>
+									<tr class="assessmentCandidateIdSpan" style="display: none">
+										<td width="27%" align="right" class="head1 CandidateIdText"
+											id=""></td>
+										<td align="left">:<strong> <span
+												class="candId"></span></strong></td>
+									</tr>
+									<tr>
+										<td width="27%" align="right" class="head1 candName" id="">Name
+										</td>
+										<td align="left">:<strong> <span
+												class="candOrigName"></span></strong></td>
+									</tr>
+
+									<tr class="DOBSpan" style="display: none">
+										<td align="right" class="head1 dobText" id="">Date Of
+											Birth</td>
+										<td align="left">:<strong> <span class="dob"></span></strong></td>
+
+									</tr>
+
+									<tr class="LoginIdSpan" style="display: none">
+										<td align="right" class="head1 loginIdText" id="">Login
+											Id</td>
+										<td align="left">:<strong> <span class="loginId"></span></strong></td>
+
+									</tr>
+									<tr class="EmailIdSpan" style="display: none">
+										<td align="right" class="head1 emailIdText">Email Id</td>
+										<td align="left">:<strong> <span class="emailId"></span></strong></td>
+
+									</tr>
+									<tr class="ContactNumSpan" style="display: none">
+										<td align="right" class="head1 contactNoText" id="">Contact
+											Number</td>
+										<td align="left">:<strong> <span
+												class="contactNo"></span></strong></td>
+									</tr>
+									<tr class="multilingualDropdown" style="display: none">
+										<td class="cngLang  head1" align="right">Change Language
+											:</td>
+										<td>: <select align="right" id="languageSelect"
+											onchange="selLang(this.value);"
+											onmousedown="if(this.options.length>8){this.size=8;}"
+											onchange='this.size=0;' onclick="this.size=0;"></select>
+										</td>
+									</tr>
+									<tr id="defaultLangDropdown" style="display: none">
+										<td class="cngDefLang  head1" align="right">Change QP
+											Language :</td>
+										<td>: <select align="right" id="defaultSelectedLanguage"
+											onchange="changeDefaultLang(this.value);"
+											onmousedown="if(this.options.length>8){this.size=8;}"
+											onchange='this.size=0;' onclick="this.size=0;"></select>
+										</td>
+									</tr> -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!--profile div starts-->
+    <div class="courseInfoPop">
+
+        <table class="candidateDetailstbl">
+            <tbody>
+                <tr class="mockLoginIdSpan" style="display: none">
+                    <td align="right" id="login" class="head1 loginName"></td>
+                    <td align="left">:<strong> <span class="mockCandId">11111</span></strong></td>
+                </tr>
+                <tr class="assessmentCandidateIdSpan" style="display: none">
+                    <td align="right" class="head1 CandidateIdText" id=""></td>
+                    <td align="left">:<strong> <span class="candId"></span></strong></td>
+                </tr>
+                <tr>
+                    <td align="right" class="head1 candName" id="">Name</td>
+                    <td align="left">:<strong> <span
+							class="candOrigName"></span></strong></td>
+                </tr>
+
+                <!-- <tr class="DOBSpan" style="display: none">
+					<td align="right" class="head1 dobText" id="">Date Of Birth</td>
+					<td align="left">:<strong> <span class="dob"></span></strong></td>
+
+				</tr> -->
+
+                <tr class="LoginIdSpan" style="display: none">
+                    <td align="right" class="head1 loginIdText" id="">Login Id</td>
+                    <td align="left">:<strong> <span class="loginId"></span></strong></td>
+
+                </tr>
+                <tr class="EmailIdSpan" style="display: none">
+                    <td align="right" class="head1 emailIdText">Email Id</td>
+                    <td align="left">:<strong> <span class="emailId"></span></strong></td>
+
+                </tr>
+                <!-- <tr class="ContactNumSpan" style="display: none">
+					<td align="right" class="head1 contactNoText" id="">Contact
+						Number</td>
+					<td align="left">:<strong> <span class="contactNo"></span></strong></td>
+				</tr> -->
+                <tr class="multilingualDropdown" style="display: none">
+                    <td class="cngLang  head1" align="right">Change Language :</td>
+                    <td>: <select align="right" id="languageSelect" onchange="selLang(this.value);" onmousedown="if(this.options.length>8){this.size=8;}" onchange='this.size=0;' onclick="this.size=0;"></select>
+                    </td>
+                </tr>
+                <tr id="defaultLangDropdown" style="display: none">
+                    <td class="cngDefLang  head1" align="right">Change QP Language :
+                    </td>
+                    <td>: <select align="right" id="defaultSelectedLanguage" onchange="changeDefaultLang(this.value);" onmousedown="if(this.options.length>8){this.size=8;}" onchange='this.size=0;' onclick="this.size=0;"></select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- mobile popup -->
+    <div class="mpop">
+        <a class="iconRemoveSign">&times;</a>
+        <div class="mContent"></div>
+    </div>
+
+    <!---------------------Popup Content Ends ----------------------->
+    <div class="overlay" style="display: none;"></div>
+    <div class="overlayForInterruption" style="display: none;"></div>
+    <!-------- warning popup starts --------------->
+    <div class="warningPopup" id="warningPopup">
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl" id="warning">Warning</div>
+            <a class="fRight popCloseSubmitWarning" id="closeSubmitWarning" onclick="isOkClickedWarning()">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <span style="display: block;"><img src="images/warning-icon.png" style="margin-right: 10px;" class="warning-icon" /></span>
+            <span class="warning-lbl" id="seterror"></span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a class="greenBtn cnfPopNo1 Ok" onclick="isOkClickedWarning()">Ok</a>
+        </div>
+    </div>
+    <!----------
+<!---------------------Popup Content Ends ----------------------->
+    <!-------- info popup starts --------------->
+    <div class="confrmPopup" id="InfoPopup">
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info infoLabel">Info</div>
+            <a class="fRight popClose">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <span style="display: block;"><div><img src="images/info.gif" style=" margin-right: 10px;" class="info-icon"/></span><span id="infoMsg2" class="info-lbl" style="vertical-align: middle;margin-left: 33px;display: inline-block;margin-top: -25px;"></span></div>
+    </div>
+    <div class="cnfPopBtnPnl">
+        <a class="greenBtn cnfPopNo Ok">Ok</a>
+    </div>
+    </div>
+    <!-------- info popup ends --------------->
+    <!-------- FileUpload popup starts --------------->
+    <div class="confrmPopup" id="fileUploadPopup" style="width: 900px;">
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info infoLabel">Info
+            </div>
+            <a class="fRight popClose">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy" style="height: 500px; overflow: auto">
+            <span id="infoMsg3" class="info-lbl"></span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a class="greenBtn cnfPopNo Ok">Ok</a>
+        </div>
+    </div>
+    <!-------- FileUpload popup ends --------------->
+    <!-------- submit popup ends --------------->
+    <div class="confrmPopup" id="SubmitPopup">
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info infoLabel">Info
+            </div>
+            <a class="fRight popClose" onclick='submitMock("")'>Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <span style="display: block;"><img src="images/info.gif" style="margin-right: 10px;" class="info-icon"/ ></span>
+            <span id="submitMsg" class="info-lbl" style="vertical-align: middle; margin-left: 33px; display: inline-block; margin-top: -25px;"></span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a class="greenBtn Ok" onclick='submitMock("")'>Ok</a>
+        </div>
+    </div>
+    <!-------- submit popup ends --------------->
+    <!-------- saveBackup alert starts --------------->
+    <div class="confrmPopup" id="backupAlerts">
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info infoLabel">Info
+            </div>
+            <a class="fRight popClose" onclick="closeWindowOrRedirect()">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <span style="display: block;"><img src="images/info.gif" style="margin-right: 10px;" class="info-icon" /></span>
+            <span id="backupAlertMsg" class="info-lbl" style="vertical-align: middle; margin-left: 33px; display: inline-block; margin-top: -25px;"></span></br>
+            <span id="backupAlertMsgWindowClose" class="info-lbl" style="vertical-align: middle; margin-left: 33px; display: none; margin-top: -25px;">If the assessment player is not closed then please press<b> Right Shift + Esc</b>.</span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a class="greenBtn Ok" onclick="closeWindowOrRedirect()">Ok</a>
+        </div>
+    </div>
+    <!-------- saveBackup alert ends --------------->
+    <!-------- Online submit popup ends --------------->
+    <div class="confrmPopup" id="submitOnlineAssessment">
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info infoLabel">Info</div>
+            <a class="fRight popClose" onclick="submitOnlineAssessment()">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <span style="display: block;"><img src="images/info.gif"
+				style="margin-right: 10px;" class="info-icon" /></span><span id="submitOnlineMsg" class="info-lbl" style="vertical-align: middle; margin-left: 33px; display: inline-block; margin-top: -25px;"></span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a class="greenBtn Ok" onclick="submitOnlineAssessment()" style="vertical-align: middle;">Ok</a>
+        </div>
+    </div>
+    <!-------- Online submit popup ends --------------->
+    <!-------- Clear Response popup starts --------------->
+    <div class="confrmPopup" id="ClearPopup">
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info">Warning</div>
+            <a href="javascript:void(0)" class="fRight popClose">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <span style="display: block;"><img src="images/warning.gif"
+				style="margin-right: 10px;" class="info-icon" /></span><span id="ClearMsg" class="info-lbl" style="vertical-align: middle; margin-left: 33px; display: inline-block; margin-top: -25px;">Are
+				you sure you want to clear all responses in this section?</span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a href="javascript:void(0)" class="greenBtn cnfPopNo" onclick='resetOptionGroup()'>Yes</a> <a href="javascript:void(0)" class="greenBtn cnfPopNo">No</a>
+        </div>
+    </div>
+    <!--------  Clear Response popup starts  --------------->
+    <!-------- recording popup starts --------------->
+    <div class="confrmPopup" id="recordingLimitReachedPopup">
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info infoLabel">Info</div>
+            <a class="fRight popClose">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <span style="display: block;"><img src="images/info.gif"
+				style="margin-right: 10px;" class="info-icon" /></span><span id="recordingLimitReachedPopupMessage" class="info-lbl" style="vertical-align: middle; margin-left: 33px; display: inline-block; margin-top: -25px;">Limit
+				for recording response reached. Please click on save to save your
+				response.</span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a class="greenBtn cnfPopNo Ok">Ok</a>
+        </div>
+    </div>
+    <div class="confrmPopup" id="reRecordPopUp">
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info">Warning</div>
+            <a href="javascript:void(0)" class="fRight popClose">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <span style="display: block;"><img src="images/warning.gif"
+				style="margin-right: 10px;" class="info-icon" /></span><span id="reRecordPopUpMsg" class="info-lbl" style="vertical-align: middle; margin-left: 33px; display: inline-block; margin-top: -25px;">If
+				you start recording again and save, recording which is already saved
+				by you will be overwritten. Are you sure you want to start recording
+				again?</span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a href="javascript:void(0)" class="greenBtn cnfPopNo Yes" onclick='reStartRecording();'>Yes</a> <a href="javascript:void(0)" class="greenBtn cnfPopNo No">No</a>
+        </div>
+    </div>
+    <div class="confrmPopup" id="saveAndNextRecordingPopup">
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info">Warning</div>
+            <a href="javascript:void(0)" class="fRight popClose">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <span style="display: block;"><img src="images/warning.gif"
+				style="margin-right: 10px;" class="info-icon" /></span><span id="saveAndNextRecordingPopupMsg" class="info-lbl" style="vertical-align: middle; margin-left: 33px; display: inline-block; margin-top: -25px;">Your
+				recording won't get saved without clicking on save. Are you sure you
+				want to move forward with out saving the current recording?</span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a href="javascript:void(0)" class="greenBtn cnfPopNo Yes" onclick='saveAndNextRecording();'>Yes</a> <a href="javascript:void(0)" class="greenBtn cnfPopNo No">No</a>
+        </div>
+    </div>
+    <div class="confrmPopup" id="numberPanelRecordingPopup">
+        <input type="hidden" id="quesNo" name="quesNo" />
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info">Warning</div>
+            <a href="javascript:void(0)" class="fRight popClose">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <span style="display: block;"><img src="images/warning.gif"
+				style="margin-right: 10px;" class="info-icon" /></span><span id="numberPanelRecordingPopupMsg" class="info-lbl" style="vertical-align: middle; margin-left: 33px; display: inline-block; margin-top: -25px;">Your
+				recording won't get saved without clicking on save. Are you sure you
+				want to move forward with out saving the current recording?</span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a href="javascript:void(0)" class="greenBtn cnfPopNo Yes" onclick='navigateThroughNumberPanel();'>Yes</a> <a href="javascript:void(0)" class="greenBtn cnfPopNo No">No</a>
+        </div>
+    </div>
+    <div class="confrmPopup" id="sectionNavigationRecordingPopup">
+        <input type="hidden" id="secNumber" name="secNumber" />
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info">Warning</div>
+            <a href="javascript:void(0)" class="fRight popClose">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <span style="display: block;"><img src="images/warning.gif"
+				style="margin-right: 10px;" class="info-icon" /></span><span id="sectionNavigationRecordingPopupMsg" class="info-lbl" style="vertical-align: middle; margin-left: 33px; display: inline-block; margin-top: -25px;">Your
+				recording won't get saved without clicking on save. Are you sure you
+				want to move forward with out saving the current recording?</span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a href="javascript:void(0)" class="greenBtn cnfPopNo Yes" onclick='navigateToSection();'>Yes</a> <a href="javascript:void(0)" class="greenBtn cnfPopNo No">No</a>
+        </div>
+    </div>
+    <div class="confrmPopup" id="groupNavigationRecordingPopup">
+        <input type="hidden" id="grpNumber" name="grpNumber" />
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info">Warning</div>
+            <a href="javascript:void(0)" class="fRight popClose">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <span style="display: block;"><img src="images/warning.gif"
+				style="margin-right: 10px;" class="info-icon" /></span><span id="groupNavigationRecordingPopupMsg" class="info-lbl" style="vertical-align: middle; margin-left: 33px; display: inline-block; margin-top: -25px;">Your
+				recording won't get saved without clicking on save. Are you sure you
+				want to move forward with out saving the current recording?</span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a href="javascript:void(0)" class="greenBtn cnfPopNo Yes" onclick='navigateToGroup();'>Yes</a> <a href="javascript:void(0)" class="greenBtn cnfPopNo No">No</a>
+        </div>
+    </div>
+    <div class="confrmPopup" id="recordingUploadFailurePopup">
+        <div class="cnfPopHdr">
+            <div class="cnfPopHdrLbl info">Warning</div>
+            <a href="javascript:void(0)" class="fRight popClose">Close</a>
+            <div class="float-clear"></div>
+        </div>
+        <div class="cnfPopBdy">
+            <img src="images/warning.gif" style="margin-right: 10px;" class="info-icon" /><span id="recordingUploadFailurePopupMsg" class="info-lbl" style="vertical-align: middle;">Some Error
+				occured while uploading your response. Do you want to try uploading
+				the response again?</span>
+        </div>
+        <div class="cnfPopBtnPnl">
+            <a href="javascript:void(0)" class="greenBtn cnfPopNo Yes" onclick='reUploadBlob();'>Yes</a> <a href="javascript:void(0)" class="greenBtn cnfPopNo No">No</a>
+        </div>
+    </div>
+    <!-------- recording popup ends --------------->
+    <!--Scratch Pad Starts Here-->
+    <div class="scratch-pad-container">
+        <div class="scratch-pad-close" id="closeButton_scratchpad">X</div>
+        <div class="tools">
+            <a href='#simple_sketch' data-tool="marker" data-color="#000000" class="clickToSelectMarker" title="Click to select Marker">Marker</a>
+        </div>
+        <canvas id="simple_sketch" width=800 height=300></canvas>
+    </div>
+    <script type="text/javascript">
+        function scratchPadiON() {
+            $('.scratch-pad-container .tools').append("<a href='#simple_sketch' data-color='#fff' class='clickToSelectEraser' title='" + $(globalXmlvar).find('clickToSelectEraser').text() + "' style='background: " + this + ";'>" + $(globalXmlvar).find('eraser').text() + "</a> ");
+            if (jQuery.browser.msie) {
+                if ($.browser.version == '7.0' || $.browser.version == '8.0') {
+                    $('.scratch-pad-container .tools').append("<a href='#simple_sketch' data-color='#000' style='width: 10px; background: #000;'></a> ");
+                } else {
+                    $.each(['#f00', '#ff0', '#0f0', '#0ff', '#00f', '#f0f', '#000'], function() {
+                        $('.scratch-pad-container .tools').append("<a href='#simple_sketch' data-color='" + this + "' style='width: 10px; background: " + this + ";'></a> ");
+                    });
+                }
+            } else {
+                $.each(['#f00', '#ff0', '#0f0', '#0ff', '#00f', '#f0f', '#000'], function() {
+                    $('.scratch-pad-container .tools').append("<a href='#simple_sketch' data-color='" + this + "' style='width: 10px; background: " + this + ";'></a> ");
+                });
+            }
+            $.each([3, 5, 10, 15], function() {
+                $('.scratch-pad-container .tools').append("<a  href='#simple_sketch' class='selectWidthOfTool' title='" + $(globalXmlvar).find('widthOfTool').text() + "' data-size='" + this + "' style='background: #ccc'>" + this + "</a> ");
+            });
+            $('#simple_sketch').sketch();
+            $('.clickToSelectMarker').html($(globalXmlvar).find('marker').text());
+        }
+    </script>
+    <!--Scratch Pad Ends Here-->
+    <script type="text/javascript">
+        $(function() {
+            $('.tabs-nav li a').live('click', function() {
+                var cur_href = $(this).attr('href');
+                $('.fragmentDiv').css('display', 'none');
+                $(this).parent().siblings('li').removeClass('tabs-selected');
+                if (!($(this).parent().hasClass('tabs-selected'))) {
+                    $(this).parent().addClass('tabs-selected')
+                }
+                if (cur_href == "#fragment1") {
+                    $('#fragment1').css('display', 'block');
+                } else {
+                    $('#fragment2').css('display', 'block');
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(document).on("click", ".subject-name", function() {
+                $(this).addClass("selectedsubject").siblings().removeClass("selectedsubject");
+            });
+            jQuery(document).on("click", ".group-arrow-right", function() {
+                var getlastindex = jQuery(".group-panel").find(".allSections:visible:last").index() + 1;
+                var getfirstindex = jQuery(".group-panel").find(".allSections:visible:first").index() + 1;
+                while (getfirstindex != (getlastindex + 1)) {
+                    jQuery(".group-panel").find(".allSections").eq(getfirstindex - 1).hide();
+                    getfirstindex++;
+                }
+                var calculategroupwidthcompare = $(window).width() - 275 - $('.components-section').width();
+                var innerwidth = 0;
+                getlastindex = getlastindex - 1;
+                jQuery("#groups .allSections:gt(" + getlastindex + ")").each(function() {
+                    innerwidth += jQuery(this).outerWidth(true);
+                    if (innerwidth < calculategroupwidthcompare) {
+                        jQuery(this).show();
+                    } else {
+                        return false;
+                    }
+                });
+                jQuery(".group-arrow-left-disabled").attr("class", "group-arrow-left");
+                if (jQuery(".group-panel").find(".allSections:last").is(":visible"))
+                    jQuery(".group-arrow-right").attr("class", "group-arrow-right-disabled");
+            });
+
+            jQuery(document).on("click", ".group-arrow-left", function() {
+                var calculategroupwidthcompare = jQuery(".group-panel").outerWidth(true);
+                var innerwidth = 0;
+
+                var getlastindex = jQuery(".group-panel").find(".allSections:visible:last").index() + 1;
+                var getfirstindex = jQuery(".group-panel").find(".allSections:visible:first").index() + 1;
+                while (getfirstindex != (getlastindex + 1)) {
+                    jQuery(".group-panel").find(".allSections").eq(getlastindex - 1).hide();
+                    getlastindex--;
+                }
+                var calculategroupwidthcompare = $(window).width() - 250 - $('.components-section').width();
+                var innerwidth = 0;
+                getfirstindex = getfirstindex - 1;
+                $(jQuery("#groups .allSections:lt(" + getfirstindex + ")").get().reverse()).each(function() {
+                    innerwidth += jQuery(this).outerWidth(true);
+                    if (innerwidth < calculategroupwidthcompare) {
+                        jQuery(this).show();
+                    } else {
+                        return false;
+                    }
+                });
+                jQuery(".group-arrow-right-disabled").attr("class", "group-arrow-right");
+                if (jQuery(".group-panel").find(".allSections:first").is(":visible"))
+                    jQuery(".group-arrow-left").attr("class", "group-arrow-left-disabled");
+            });
+            jQuery(document).on("click", ".subject-arrow-right", function() {
+                navSection = true;
+                var getlastindex = jQuery(".subject-selection").find(".subject-name:visible:last").index() + 1;
+                var getfirstindex = jQuery(".subject-selection").find(".subject-name:visible:first").index() + 1;
+                while (getfirstindex != (getlastindex + 1)) {
+                    jQuery(".subject-selection .subject-name").eq(getfirstindex - 1).hide();
+                    getfirstindex++;
+                }
+                var calculategroupwidthcompare = $(window).width() - 250;
+                var innerwidth = 0;
+                getlastindex = getlastindex - 1;
+                jQuery(".subject-selection .subject-name:gt(" + getlastindex + ")").each(function() {
+                    innerwidth += jQuery(this).outerWidth(true);
+                    if (innerwidth < calculategroupwidthcompare) {
+                        jQuery(this).show();
+                    } else {
+                        return false;
+                    }
+                });
+                jQuery(".subject-arrow-left-disabled").attr("class", "subject-arrow-left");
+                if (jQuery(".subject-selection").find(".subject-name:last").is(":visible"))
+                    jQuery(".subject-arrow-right").attr("class", "subject-arrow-right-disabled");
+            });
+            jQuery(document).on("click", ".subject-arrow-left", function() {
+                navSection = false;
+                var calculategroupwidthcompare = jQuery(".subject-selection").outerWidth(true);
+                var innerwidth = 0;
+                var getlastindex = jQuery(".subject-selection").find(".subject-name:visible:last").index() + 1;
+                var getfirstindex = jQuery(".subject-selection").find(".subject-name:visible:first").index() + 1;
+                while (getfirstindex != (getlastindex + 1)) {
+                    jQuery(".subject-selection").find(".subject-name").eq(getlastindex - 1).hide();
+                    getlastindex--;
+                }
+                var calculategroupwidthcompare = $(window).width() - 250;
+                var innerwidth = 0;
+                getfirstindex = getfirstindex;
+                getfirstindex = getfirstindex - 1;
+                $(jQuery("#sections .subject-name:lt(" + getfirstindex + ")").get().reverse()).each(function() {
+                    innerwidth += jQuery(this).outerWidth(true);
+                    if (innerwidth < calculategroupwidthcompare) {
+                        jQuery(this).show();
+                    } else {
+                        return false;
+                    }
+                });
+                jQuery(".subject-arrow-right-disabled").attr("class", "subject-arrow-right");
+                if (jQuery(".subject-selection").find(".subject-name:first").is(":visible"))
+                    jQuery(".subject-arrow-left").attr("class", "subject-arrow-left-disabled");
+
+            });
+            jQuery(document).click(function(e) {
+                if (!(jQuery(e.target).hasClass("subject_instruction_icon")))
+                    jQuery(".subject_information_div").remove();
+            });
+            jQuery(document).on("click", ".calculator-icon-container", function() {
+                if (jQuery(".calculator_div").css("display") == "block") {
+                    jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                    jQuery(".component-icon-container span").removeClass("icon-selected");
+                    jQuery("#loadCalc").css("display", "none");
+                } else {
+                    jQuery(".protactor-div").css("display", "none");
+                    jQuery(".scratch-pad-container").css("display", "none");
+                    jQuery(".textarea-div").css("display", "none");
+                    jQuery(".ruler-div").css("display", "none");
+                    var getcalculatorposition = jQuery(this).offset();
+                    var gettop = getcalculatorposition.top + jQuery(".nav-container").height();
+                    var getright = jQuery(window).width() - (getcalculatorposition.left + jQuery(this).width());
+                    jQuery(".calculator_div").css("right", getright).css("top", gettop).css("display", "block");
+                    jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                    jQuery(".component-icon-container span").removeClass("icon-selected");
+                    jQuery(this).addClass("component-icon-container-selected");
+                    jQuery(this).find("span").addClass("icon-selected");
+                }
+            });
+            jQuery(document).on("click", ".textarea-icon-container", function() {
+                if (jQuery(".textarea-div").css("display") == "block") {
+                    jQuery(".textarea-div").css("display", "none");
+                    jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                    jQuery(".component-icon-container span").removeClass("icon-selected");
+                } else if ($(window).width() < 1000) {
+                    jQuery(".protactor-div").css("display", "none");
+                    jQuery(".scratch-pad-container").css("display", "none");
+                    jQuery(".calculator_div").css("display", "none");
+                    jQuery(".ruler-div").css("display", "none");
+
+                    var offset = jQuery(this).offset();
+                    //var gettop=offset.top + jQuery(".grup_components").height();
+                    var gettop = $(window).height() - $(".textarea-div").height();
+                    var actw = $(".textarea-div").width();
+                    var textwidth = jQuery(window).width() - actw;
+                    jQuery(".textarea-div").css("left", textwidth / 2).css("top", gettop / 2).css("display", "block");
+                } else {
+                    jQuery(".protactor-div").css("display", "none");
+                    jQuery(".scratch-pad-container").css("display", "none");
+                    jQuery(".calculator_div").css("display", "none");
+                    jQuery(".ruler-div").css("display", "none");
+                    var getcalculatorposition = jQuery(this).offset();
+                    var gettop = getcalculatorposition.top + jQuery(".nav-container").height();
+                    var getright = jQuery(window).width() - (getcalculatorposition.left + jQuery(this).width());
+                    jQuery(".textarea-div").css("right", getright).css("top", gettop).css("display", "block");
+                    jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                    jQuery(".component-icon-container span").removeClass("icon-selected");
+                    jQuery(this).addClass("component-icon-container-selected");
+                    jQuery(this).find("span").addClass("icon-selected");
+                }
+            });
+            jQuery(document).on("click", "#clear-textarea", function() {
+                jQuery("#texteditor").val("");
+            });
+            jQuery(document).on("click", ".textarea_close", function() {
+                jQuery(".textarea-div").hide();
+                jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                jQuery(".component-icon-container span").removeClass("icon-selected");
+            });
+            jQuery(document).on("click", ".scratchpad-icon-container", function() {
+                if (jQuery(".scratch-pad-container").css("display") == "block") {
+                    jQuery(".scratch-pad-container").css("display", "none");
+                    jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                    jQuery(".component-icon-container span").removeClass("icon-selected");
+                } else if ($(window).width() < 1000) {
+                    jQuery(".protactor-div").css("display", "none");
+                    jQuery(".calculator_div").css("display", "none");
+                    jQuery(".textarea-div").css("display", "none");
+                    jQuery(".ruler-div").css("display", "none");
+                    var offset = jQuery(this).offset();
+                    var gettop = offset.top + jQuery(".grup_components").height();
+                    //var gettop = $(window).height() - $(".scratch-pad-container").height(); alert(gettop);
+                    var actw = $(".scratch-pad-container").width();
+                    var textwidth = jQuery(window).width() - actw;
+                    jQuery(".scratch-pad-container").css("left", textwidth / 2).css("top", gettop / 2).css("display", "block");
+                } else {
+                    jQuery(".protactor-div").css("display", "none");
+                    jQuery(".calculator_div").css("display", "none");
+                    jQuery(".textarea-div").css("display", "none");
+                    jQuery(".ruler-div").css("display", "none");
+                    var getcalculatorposition = jQuery(this).offset();
+                    var gettop = getcalculatorposition.top + jQuery(".nav-container").height();
+                    var getright = (jQuery(window).width() - (getcalculatorposition.left + jQuery(this).width())) / 2;
+                    jQuery(".scratch-pad-container").css("right", getright).css("top", gettop).css("display", "block");
+                    jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                    jQuery(".component-icon-container span").removeClass("icon-selected");
+                    jQuery(this).addClass("component-icon-container-selected");
+                    jQuery(this).find("span").addClass("icon-selected");
+                }
+            });
+            jQuery(document).on("click", ".scratch-pad-close", function() {
+                jQuery(".scratch-pad-container").hide();
+                jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                jQuery(".component-icon-container span").removeClass("icon-selected");
+            });
+            jQuery(document).on("click", ".ruler-icon-container", function() {
+                if (jQuery(".ruler-div").css("display") == "block") {
+                    jQuery(".ruler-div").css("display", "none");
+                    jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                    jQuery(".component-icon-container span").removeClass("icon-selected");
+                } else {
+                    var getcalculatorposition = jQuery(this).offset();
+                    if (!(document.addEventListener))
+                        var gettop = getcalculatorposition.top + jQuery(".nav-container").height();
+                    else
+                        var gettop = getcalculatorposition.top + jQuery(".nav-container").height();
+                    var rulerleft = (jQuery(window).width() - jQuery(".ruler-div").width()) / 2;
+                    jQuery(".ruler-div").css("left", rulerleft).css("top", gettop).css("display", "block");
+                    jQuery(".ruler-div").css("display", "block");
+                    jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                    jQuery(".component-icon-container span").removeClass("icon-selected");
+                    jQuery(this).addClass("component-icon-container-selected");
+                    jQuery(this).find("span").addClass("icon-selected");
+                }
+                jQuery(".calculator_div").css("display", "none");
+                jQuery(".protactor-div").css("display", "none");
+                jQuery(".scratch-pad-container").css("display", "none");
+                jQuery(".textarea-div").css("display", "none");
+
+            });
+            jQuery(document).on("click", ".protactor-icon-container", function() {
+                if (jQuery(".protactor-div").css("display") == "block") {
+                    jQuery(".protactor-div").css("display", "none");
+                    jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                    jQuery(".component-icon-container span").removeClass("icon-selected");
+                } else {
+                    var getcalculatorposition = jQuery(this).offset();
+                    var gettop = getcalculatorposition.top + jQuery(".nav-container").height(); //205 is the height of protactor
+                    var protactorleft = (jQuery(window).width() - jQuery(".protactor-div").width()) / 2;
+                    jQuery(".protactor-div").css("left", protactorleft).css("top", gettop).css("display", "block");
+                    jQuery(".protactor-div").css("display", "block");
+                    jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                    jQuery(".component-icon-container span").removeClass("icon-selected");
+                    jQuery(this).addClass("component-icon-container-selected");
+                    jQuery(this).find("span").addClass("icon-selected");
+                }
+                jQuery(".calculator_div").css("display", "none");
+                jQuery(".scratch-pad-container").css("display", "none");
+                jQuery(".textarea-div").css("display", "none");
+                jQuery(".ruler-div").css("display", "none");
+
+            });
+            var zoom = true;
+            jQuery(document).on("click", ".zoomin-icon-container", function() {
+                if (zoom == true) {
+                    jQuery(".Ans_Area").addClass("ZeroLevelZoom");
+                    zoom = false;
+                }
+                if (jQuery(".Ans_Area").hasClass("ZeroLevelZoom")) {
+                    jQuery(".SAAnswer").css("font-size", "20px");
+                    $(".leftDiv img").each(function() {
+                        if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                            $(this).css("width", $(this).width() + 10);
+                        }
+                    });
+                    $(".rightDiv img").each(function() {
+                        if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                            $(this).css("width", $(this).width() + 10);
+                        }
+                    });
+                    jQuery(".Ans_Area,.divHeader").removeClass("ZeroLevelZoom");
+                    jQuery(".Ans_Area,.divHeader").addClass("FirstLevelZoom");
+                    jQuery(".rightDiv").removeClass("ZeroLevelZoom");
+                    jQuery(".rightDiv").addClass("FirstLevelZoom");
+                    $('.zoomout-icon-container span').removeClass("icon-9");
+                    $('.zoomoutCursor').removeClass("disableCursor");
+                    $('.zoomout-icon-container span').addClass("icon-7");
+                    if (typeof(iOAP.secDetails[iOAP.curSection].groupAllQuestions) != "undefined" && iOAP.secDetails[iOAP.curSection].groupAllQuestions != "" && iOAP.secDetails[iOAP.curSection].groupAllQuestions == "true") {
+                        jQuery("#quesOuterDiv").removeClass("ZeroLevelZoom");
+                        jQuery("#quesOuterDiv").addClass("FirstLevelZoom");
+                        $("#quesOuterDiv img").each(function() {
+                            if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                                $(this).css("width", $(this).width() + 10);
+                            }
+                        });
+                    }
+                } else if (jQuery(".Ans_Area").hasClass("FirstLevelZoom")) {
+                    jQuery(".SAAnswer").css("font-size", "22px");
+                    $(".leftDiv img").each(function() {
+                        if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                            $(this).css("width", $(this).width() + 10);
+                        }
+                    });
+                    $(".rightDiv img").each(function() {
+                        if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                            $(this).css("width", $(this).width() + 10);
+                        }
+                    });
+                    jQuery(".Ans_Area,.divHeader").removeClass("FirstLevelZoom");
+                    jQuery(".Ans_Area,.divHeader").addClass("SecondLevelZoom");
+                    jQuery(".rightDiv").removeClass("FirstLevelZoom");
+                    jQuery(".rightDiv").addClass("SecondLevelZoom");
+                    if (mockVar.storeCandResponse === 0) {
+                        $('.zoomin-icon-container span').removeClass("icon-6");
+                        $('.zoomin-icon-container span').addClass("icon-8");
+                        $('.zoominCursor').addClass("disableCursor");
+                    }
+                    if (typeof(iOAP.secDetails[iOAP.curSection].groupAllQuestions) != "undefined" && iOAP.secDetails[iOAP.curSection].groupAllQuestions != "" && iOAP.secDetails[iOAP.curSection].groupAllQuestions == "true") {
+                        jQuery("#quesOuterDiv").removeClass("FirstLevelZoom");
+                        jQuery("#quesOuterDiv").addClass("SecondLevelZoom");
+                        $("#quesOuterDiv img").each(function() {
+                            if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                                $(this).css("width", $(this).width() + 10);
+                            }
+                        });
+                    }
+                } else if (jQuery(".Ans_Area").hasClass("SecondLevelZoom")) {
+                    if (mockVar.storeCandResponse != 0) {
+                        jQuery(".SAAnswer").css("font-size", "24px");
+                        $(".leftDiv img").each(function() {
+                            if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                                $(this).css("width", $(this).width() + 10);
+                            }
+                        });
+                        $(".rightDiv img").each(function() {
+                            if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                                $(this).css("width", $(this).width() + 10);
+                            }
+                        });
+                        $(".progImg").css("width", 20);
+                        jQuery(".Ans_Area,.divHeader").removeClass("SecondLevelZoom");
+                        jQuery(".Ans_Area,.divHeader").addClass("ThirdLevelZoom");
+                        jQuery(".rightDiv").removeClass("SecondLevelZoom");
+                        jQuery(".rightDiv").addClass("ThirdLevelZoom");
+                        $('.zoomin-icon-container span').removeClass("icon-6");
+                        $('.zoomin-icon-container span').addClass("icon-8");
+                        $('.zoominCursor').addClass("disableCursor");
+                        if (typeof(iOAP.secDetails[iOAP.curSection].groupAllQuestions) != "undefined" && iOAP.secDetails[iOAP.curSection].groupAllQuestions != "" && iOAP.secDetails[iOAP.curSection].groupAllQuestions == "true") {
+                            jQuery("#quesOuterDiv").removeClass("SecondLevelZoom");
+                            jQuery("#quesOuterDiv").addClass("ThirdLevelZoom");
+                            $("#quesOuterDiv img").each(function() {
+                                if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                                    $(this).css("width", $(this).width() + 10);
+                                }
+                            });
+                        }
+                    }
+                    //jQuery(".zoomin-icon-container").hide();
+                }
+                jQuery(".protactor-div").css("display", "none");
+                jQuery(".scratch-pad-container").css("display", "none");
+                jQuery(".calculator_div").css("display", "none");
+                jQuery(".ruler-div").css("display", "none");
+                jQuery(".textarea-div").css("display", "none");
+            });
+            jQuery(document).on("click", ".zoomout-icon-container", function() {
+                if (jQuery(".Ans_Area").hasClass("FirstLevelZoom")) {
+                    //jQuery(".leftDiv").css("font-size","1.2em !important");
+                    //jQuery(".rightDiv").css("font-size","1.2em !important");
+                    jQuery(".SAAnswer").css("font-size", "1em");
+                    jQuery(".Ans_Area,.divHeader").removeClass("FirstLevelZoom");
+                    jQuery(".Ans_Area,.divHeader").addClass("ZeroLevelZoom");
+                    jQuery(".rightDiv").removeClass("FirstLevelZoom");
+                    jQuery(".rightDiv").addClass("ZeroLevelZoom");
+                    $(".leftDiv img").each(function() {
+                        if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                            $(this).css("width", $(this).width() - 10);
+                        }
+                    });
+                    $(".rightDiv img").each(function() {
+                        if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                            $(this).css("width", $(this).width() - 10);
+                        }
+                    });
+                    $('.zoomout-icon-container span').removeClass("icon-7");
+                    $('.zoomout-icon-container span').addClass("icon-9");
+                    $('.zoomoutCursor').addClass("disableCursor");
+                    $('.zoomin-icon-container span').removeClass("icon-8");
+                    $('.zoominCursor').removeClass("disableCursor");
+                    $('.zoomin-icon-container span').addClass("icon-6");
+                    if (typeof(iOAP.secDetails[iOAP.curSection].groupAllQuestions) != "undefined" && iOAP.secDetails[iOAP.curSection].groupAllQuestions != "" && iOAP.secDetails[iOAP.curSection].groupAllQuestions == "true") {
+                        jQuery("#quesOuterDiv").removeClass("FirstLevelZoom");
+                        jQuery("#quesOuterDiv").addClass("ZeroLevelZoom");
+                        $("#quesOuterDiv img").each(function() {
+                            if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                                $(this).css("width", $(this).width() - 10);
+                            }
+                        });
+                    }
+                } else if (jQuery(".Ans_Area").hasClass("SecondLevelZoom")) {
+                    jQuery(".SAAnswer").css("font-size", "20px");
+                    $(".leftDiv img").each(function() {
+                        if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                            $(this).css("width", $(this).width() - 10);
+                        }
+                    });
+                    $(".rightDiv img").each(function() {
+                        if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                            $(this).css("width", $(this).width() - 10);
+                        }
+                    });
+                    $(".progImg").css("width", 20);
+                    jQuery(".Ans_Area,.divHeader").removeClass("SecondLevelZoom");
+                    jQuery(".Ans_Area,.divHeader").addClass("FirstLevelZoom");
+                    jQuery(".rightDiv").removeClass("SecondLevelZoom");
+                    jQuery(".rightDiv").addClass("FirstLevelZoom");
+                    if (mockVar.storeCandResponse === 0) {
+                        $('.zoomin-icon-container span').removeClass("icon-8");
+                        $('.zoomin-icon-container span').addClass("icon-6");
+                        $('.zoominCursor').removeClass("disableCursor");
+                    }
+                    if (typeof(iOAP.secDetails[iOAP.curSection].groupAllQuestions) != "undefined" && iOAP.secDetails[iOAP.curSection].groupAllQuestions != "" && iOAP.secDetails[iOAP.curSection].groupAllQuestions == "true") {
+                        jQuery("#quesOuterDiv").removeClass("SecondLevelZoom");
+                        jQuery("#quesOuterDiv").addClass("FirstLevelZoom");
+                        $("#quesOuterDiv img").each(function() {
+                            if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                                $(this).css("width", $(this).width() - 10);
+                            }
+                        });
+                    }
+                } else if (jQuery(".Ans_Area").hasClass("ThirdLevelZoom")) {
+                    jQuery(".SAAnswer").css("font-size", "22px");
+                    $(".leftDiv img").each(function() {
+                        if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                            $(this).css("width", $(this).width() - 10);
+                        }
+                    });
+                    $(".rightDiv img").each(function() {
+                        if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                            $(this).css("width", $(this).width() - 10);
+                        }
+                    });
+                    $(".progImg").css("width", 20);
+                    jQuery(".Ans_Area,.divHeader").removeClass("ThirdLevelZoom");
+                    jQuery(".Ans_Area,.divHeader").addClass("SecondLevelZoom");
+                    jQuery(".rightDiv").removeClass("ThirdLevelZoom");
+                    jQuery(".rightDiv").addClass("SecondLevelZoom");
+                    $('.zoomin-icon-container span').removeClass("icon-8");
+                    $('.zoomin-icon-container span').addClass("icon-6");
+                    if (typeof(iOAP.secDetails[iOAP.curSection].groupAllQuestions) != "undefined" && iOAP.secDetails[iOAP.curSection].groupAllQuestions != "" && iOAP.secDetails[iOAP.curSection].groupAllQuestions == "true") {
+                        jQuery("#quesOuterDiv").removeClass("ThirdLevelZoom");
+                        jQuery("#quesOuterDiv").addClass("SecondLevelZoom");
+                        $("#quesOuterDiv img").each(function() {
+                            if (mockVar.MagnifyingGlass != undefined && mockVar.MagnifyingGlass != 1) {
+                                $(this).css("width", $(this).width() - 10);
+                            }
+                        });
+                    }
+                }
+                jQuery(".protactor-div").css("display", "none");
+                jQuery(".scratch-pad-container").css("display", "none");
+                jQuery(".calculator_div").css("display", "none");
+                jQuery(".ruler-div").css("display", "none");
+                jQuery(".textarea-div").css("display", "none");
+            });
+            jQuery(document).on("click", "#closeButton", function() {
+                jQuery(".calculator_div").css("display", "none");
+                jQuery(".component-icon-container").removeClass("component-icon-container-selected");
+                jQuery(".component-icon-container span").removeClass("icon-selected");
+            });
+
+            jQuery(document).on("click", ".collapse_icon", function() {
+                $(".collapsebel_panel").hide();
+                $(".expand_icon").show();
+            });
+            jQuery(document).on("click", ".expand_icon", function() {
+                $(".collapsebel_panel").show();
+                $(".expand_icon").hide();
+                if (jQuery(window).width() > 1023) {
+                    quizPageHeight();
+                } else {
+                    setDIVHeight_resp();
+                }
+            });
+            jQuery(document).on('click', ".selectmark_tool", function() {
+
+                isTextHighlighterEnabled = (isTextHighlighterEnabled ? false : true);
+                $(".textHighlighter").toggleClass("highlightext");
+                if (isTextHighlighterEnabled) {
+                    $(".textHighlighter")
+                        .attr('selectable', 'text')
+                        .css('user-select', 'text')
+                        .css('-moz-user-select', 'text')
+                        .css('-khtml-user-select', 'text')
+                        .css('-webkit-user-select', 'text')
+                        .off('selectstart', false)
+                        // .off('contextmenu', false)
+                        .off('keydown', false)
+                        .off('mousedown', false);
+
+                    $(".singleLineOptions")
+                        .attr('unselectable', 'on')
+                        .css('user-select', 'none')
+                        .css('-moz-user-select', 'none')
+                        .css('-khtml-user-select', 'none')
+                        .css('-webkit-user-select', 'none')
+                        .on('selectstart', false)
+                        // .on('contextmenu', false)
+                        .on('keydown', false)
+                        .on('mousedown', false);
+
+                } else {
+                    $(".textHighlighter")
+                        .attr('unselectable', 'on')
+                        .css('user-select', 'none')
+                        .css('-moz-user-select', 'none')
+                        .css('-khtml-user-select', 'none')
+                        .css('-webkit-user-select', 'none')
+                        .on('selectstart', false)
+                        // .on('contextmenu', false)
+                        .on('keydown', false)
+                        .on('mousedown', false);
+                }
+
+                function getSelectedText() {
+                    var html = "";
+                    if (typeof window.getSelection != "undefined") {
+                        var sel = window.getSelection();
+                        if (sel.rangeCount) {
+                            var container = document.createElement("div");
+                            for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+
+                                container.appendChild(sel.getRangeAt(i).cloneContents());
+                            }
+                            html = container.innerHTML;
+                        }
+                    } else if (typeof document.selection != "undefined") {
+                        if (document.selection.type == "Text") {
+                            html = document.selection.createRange().htmlText;
+                        }
+                    }
+                    return html;
+                }
+                $(".highlightext").mouseup(function(e) {
+                    if (!$(".textHighlighter").hasClass("highlightext")) {
+                        $(".highlightext").bind('mouseup', function(e) {
+                            e.stopPropagation();
+                        });
+                    } else if ($(".textHighlighter").hasClass("highlightext")) {
+                        var selection = getSelectedText();
+                        var lenstr = 0,
+                            listr = 0;
+                        lenstr = selection.search("<div");
+                        listr = selection.search("<li");
+                        var selectedTextLength = selection.toString().length;
+                        if (lenstr < 0 && listr < 0 && selectedTextLength > 1) {
+                            var range = window.getSelection().getRangeAt(0);
+                            var content = range.extractContents();
+                            span = document.createElement('span');
+                            span.appendChild(content);
+                            span.className = 'highlight';
+                            $(span).find(".highlight").find(".closeH").remove();
+                            if ($(span).find(".FITBQuestionList").length == 1 && $(span).find(".FITBQuestionList").html() == "") {
+                                var fitbClasses = $(span).find(".FITBQuestionList").attr("class").split(" ");
+                                for (var fitbI = 0; fitbI < fitbClasses.length; fitbI++) {
+                                    if (fitbClasses[fitbI].indexOf("_FITB") > 0) {
+                                        $(span).find("." + fitbClasses[fitbI]).remove();
+                                    }
+                                }
+
+                            }
+                            //$(span).find(".FITBQuestionList").remove();
+                            //$(span).find(".singleLineOptions").remove();
+                            //console.log(span.innerHTML);
+                            $(span).find(".highlight").removeAttr("class");
+                            if (($(span).html()).indexOf("SingleFITB") != -1) {
+                                if ($(this).html().indexOf("SingleFITB") != -1) {
+                                    $(".SingleFITB").remove();
+                                }
+                            }
+                            range.insertNode(span);
+                        }
+                        var textClassNames = e.target.className;
+                        var isGroupQuestion = false;
+                        if (textClassNames == "closeH") {
+                            textClassNames = e.target.parentElement.parentElement.className;
+                        }
+                        var textClassList = textClassNames.split(" ");
+                        var textClassName = "";
+                        var quesIdClassName = "";
+                        var isBucketQuestion = false;
+                        var isFITBQuestion = false;
+                        var isMTCQuestion = false;
+                        for (var classCount = 0; classCount < textClassList.length; classCount++) {
+                            if (textClassList[classCount].indexOf("_TextSelection") != -1 || textClassList[classCount].indexOf("_CompreTextSelection") != -1) {
+                                textClassName = textClassList[classCount].trim();
+                            } else if (textClassList[classCount].indexOf("_QuesId") != -1) {
+                                quesIdClassName = textClassList[classCount].trim().split("_")[0];
+                            } else if (textClassList[classCount].indexOf("groupQuestion") != -1) {
+                                isGroupQuestion = true;
+                            } else if (textClassList[classCount].indexOf("BucketQuestion") != -1) {
+                                isBucketQuestion = true;
+                            } else if (textClassList[classCount].indexOf("MTCQuestion") != -1) {
+                                isMTCQuestion = true;
+                            } else if (textClassList[classCount].indexOf("FITBQuestion") != -1) {
+                                isFITBQuestion = true;
+                            }
+                        }
+
+                        $(".highlightext").find('.closeH').remove();
+                        $(".highlightext .highlight").not($(".highlightext .highlight").find('.highlight')).append("<span class='closeH'></span>");
+                        if (textClassName.indexOf("_TextSelection") != -1 || textClassName.indexOf("_CompreTextSelection") != -1) {
+                            var textHighlighterIdDetails = textClassName.split("_");
+                            var TempCountIndex = 0;
+                            var quesObject = $("." + textClassName).clone();
+                            $(quesObject).find(".singleLineOptions").remove();
+                            var quesTextData = $(quesObject).html();
+                            if (isGroupQuestion) {
+                                var qNoId = parseInt(textHighlighterIdDetails[2]);
+                                quesTextData = quesTextData.replace("<span>" + (qNoId + 1) + "</span>.", "");
+                            }
+                            var status = true;
+                            do {
+                                if (quesTextData.indexOf("SingleFITB") != -1) {
+                                    var tempClassesNames = quesTextData.split("SingleFITB");
+                                    var tempQuesClassName = "";
+                                    if (tempClassesNames[0].indexOf("_FITBM") != -1) {
+                                        var tempQuesIdClassName = (tempClassesNames[0].split("FITBM")[0]).split(" ");
+                                        tempQuesClassName = tempQuesIdClassName[(tempQuesIdClassName.length - 1)];
+                                        console.log(tempQuesClassName);
+                                        tempQuesClassName = tempQuesClassName + "FITBM";
+                                    } else if (tempClassesNames[0].indexOf("_FITBS") != -1) {
+                                        var tempQuesIdClassName = (tempClassesNames[0].split("FITBS")[0]).split(" ");
+                                        tempQuesClassName = tempQuesIdClassName[(tempQuesIdClassName.length - 1)];
+                                        console.log(tempQuesClassName);
+                                        tempQuesClassName = tempQuesClassName + "FITBS";
+                                    } else if (tempClassesNames[1].indexOf("_FITBM") != -1) {
+                                        var tempQuesIdClassName = (tempClassesNames[1].split("FITBM")[0]).split(" ");
+                                        tempQuesClassName = tempQuesIdClassName[(tempQuesIdClassName.length - 1)];
+                                        console.log(tempQuesClassName);
+                                        tempQuesClassName = tempQuesClassName + "FITBM";
+                                    } else if (tempClassesNames[1].indexOf("_FITBS") != -1) {
+                                        var tempQuesIdClassName = (tempClassesNames[1].split("FITBS")[0]).split(" ");
+                                        tempQuesClassName = tempQuesIdClassName[(tempQuesIdClassName.length - 1)];
+                                        console.log(tempQuesClassName);
+                                        tempQuesClassName = tempQuesClassName + "FITBS";
+                                    }
+                                    var classNames = $("." + tempQuesClassName).attr("class");
+                                    quesTextData = quesTextData.replace($("." + tempQuesClassName).html(), "<ResponsePlaceHolder>");
+                                    var myRegExpClass = new RegExp('class="' + classNames + '"', 'g');
+                                    quesTextData = quesTextData.replace(myRegExpClass, "");
+                                    /*var tempClassNamesList = classNames.split(" ");
+                                    for(var listNo = 0;listNo < tempClassNamesList.length; listNo++){
+                                    	if(tempClassNamesList[listNo].indexOf("_FITBM") != -1 || tempClassNamesList[listNo].indexOf("_FITBS") != -1){
+                                    	quesTextData = quesTextData.replace($("."+quesIdClassName).html(),"<ResponsePlaceHolder>");
+                                    	var myRegExpClass = new RegExp('class="'+classNames+'"','g');
+                                    	quesTextData = quesTextData.replace(myRegExpClass,"");
+                                    	}
+                                    	} */
+                                }
+                                if (typeof(jwPlayerDetailsIndex[quesIdClassName]) != "undefined" && typeof(jwPlayerDetailsIndex[quesIdClassName][TempCountIndex + ""]) != "undefined") {
+                                    var tempIds = jwPlayerDetailsIndex[quesIdClassName][TempCountIndex + ""];
+                                    var divText = $("#" + tempIds).html();
+                                    var classNames = $("#" + tempIds).attr("class");
+                                    var tabindex = $("#" + tempIds).attr("tabindex");
+                                    var style = $("#" + tempIds).attr("style");
+                                    //divText = '<div id="'+tempIds+'" class="'+classNames+'" tabindex="'+tabindex+'" style="'+style+'">'+divText+'</div>';
+                                    var myRegExpClass = new RegExp('class="' + classNames + '"', 'g');
+                                    quesTextData = quesTextData.replace(myRegExpClass, "");
+                                    var myRegExpId = new RegExp('id="' + tempIds + '"', 'g');
+                                    quesTextData = quesTextData.replace(myRegExpId, "");
+                                    var myRegExpTabindex = new RegExp('tabindex="' + tabindex + '"', 'g');
+                                    quesTextData = quesTextData.replace(myRegExpTabindex, "");
+                                    var myRegExpStyle = new RegExp('style="' + style + '"', 'g');
+                                    quesTextData = quesTextData.replace(myRegExpStyle, "");
+
+                                    var updatedQuestionContent = jwPlayerDetails[quesIdClassName][tempIds];
+                                    if (mockVar.storeCandResponse == 1) {
+                                        updatedQuestionContent = updatedQuestionContent.replace(/tkcimages/g, xmlFilePath + mockVar.availableQpId + '/tkcimages');
+                                    } else {
+                                        updatedQuestionContent = updatedQuestionContent.replace(/tkcimages/g, xmlFilePath + 'tkcimages');
+                                    }
+                                    quesTextData = quesTextData.replace(divText, updatedQuestionContent);
+                                } else {
+                                    status = false;
+                                }
+                                TempCountIndex++;
+                            } while (status);
+                            if (textClassName.indexOf("_TextSelection") != -1) {
+                                mockVar.groups[textHighlighterIdDetails[0]].secDetails[textHighlighterIdDetails[1]].questions[textHighlighterIdDetails[2]].quesLangBeans[textHighlighterIdDetails[3]].quesText = quesTextData;
+                            } else if (textClassName.indexOf("_CompreTextSelection") != -1) {
+                                if (isMTCQuestion) {
+                                    quesTextData = quesTextData + "<left_column_tag>" + ($(".left_column_tag").html()) + "<left_column_tag> <right_column_tag>" + ($(".right_column_tag").html()) + "<right_column_tag>";
+                                } else if (isBucketQuestion) {
+                                    quesTextData = quesTextData + "<option_bucket_label>" + ($(".option_bucket_label").html()) + "<option_bucket_label>";
+                                } else if (isFITBQuestion) {
+                                    for (var gapLength = 0; gapLength < $(".FITBQuestionList").length; gapLength++) {
+                                        var gapClasses = $(".FITBQuestionList")[gapLength].classList;
+                                        var gapId = "";
+                                        var gapType = "";
+                                        var gapContent = "";
+                                        for (var gapClassesLength = 0; gapClassesLength < gapClasses.length; gapClassesLength++) {
+                                            if (gapClasses[gapClassesLength].indexOf("_FITBM") != -1 || gapClasses[gapClassesLength].indexOf("_FITBS") != -1) {
+                                                gapId = gapClasses[gapClassesLength].split("_")[0];
+                                                gapType = gapClasses[gapClassesLength].split("_")[1];
+                                                gapContent = $("." + gapClasses[gapClassesLength]).html();
+                                                if (gapType == "FITBM")
+                                                    gapType = "mcq";
+                                                else
+                                                    gapType = "sa";
+                                                quesTextData = quesTextData.replace(gapContent, '<gaptype="' + gapType + '" gapid="' + gapId + '">');
+                                                quesTextData = quesTextData.replace('class="' + ($(".FITBQuestionList")[gapLength].className) + '"', '');
+                                            }
+                                        }
+                                    }
+                                }
+                                mockVar.compreLaqQues[textHighlighterIdDetails[2]].langData[textHighlighterIdDetails[3]].quesText = quesTextData;
+                            }
+                        }
+                        $(".highlight").bind('mouseup', function(e) {
+                            e.stopPropagation();
+                        });
+                    }
+                });
+            });
+
+            $(document).on('click', '.closeH', function(e) {
+                var textClassNames = e.target.className;
+                if (textClassNames == "closeH") {
+                    textClassNames = e.target.parentElement.parentElement.className;
+                }
+                var textClassList = textClassNames.split(" ");
+                var textClassName = "";
+                var quesIdClassName = "";
+                var isGroupQuestion = false;
+                var isBucketQuestion = false;
+                var isMTCQuestion = false;
+                var isFITBQuestion = false;
+                for (var classCount = 0; classCount < textClassList.length; classCount++) {
+                    if (textClassList[classCount].indexOf("_TextSelection") != -1 || textClassList[classCount].indexOf("_CompreTextSelection") != -1) {
+                        textClassName = textClassList[classCount].trim();
+                    } else if (textClassList[classCount].indexOf("_QuesId") != -1) {
+                        quesIdClassName = textClassList[classCount].trim().split("_")[0];
+                    } else if (textClassList[classCount].indexOf("groupQuestion") != -1) {
+                        isGroupQuestion = true;
+                    } else if (textClassList[classCount].indexOf("BucketQuestion") != -1) {
+                        isBucketQuestion = true;
+                    } else if (textClassList[classCount].indexOf("MTCQuestion") != -1) {
+                        isMTCQuestion = true;
+                    } else if (textClassList[classCount].indexOf("FITBQuestion") != -1) {
+                        isFITBQuestion = true;
+                    }
+                }
+                $(this).parents('.highlight').children('.highlight').removeClass("highlight");
+                var allText = $(this).parents('.highlight').html().replace('<span class="closeH"></span>', '');
+                $(this).parents('.highlight').after(allText);
+                $(this).parents('.highlight').remove();
+                $(this).remove();
+
+                if (textClassName.indexOf("_TextSelection") != -1 || textClassName.indexOf("_CompreTextSelection") != -1) {
+                    var textHighlighterIdDetails = textClassName.split("_");
+                    var TempCountIndex = 0;
+                    var quesObject = $("." + textClassName).clone();
+                    $(quesObject).find(".singleLineOptions").remove();
+                    var quesTextData = $(quesObject).html();
+                    if (isGroupQuestion) {
+                        var qNoId = parseInt(textHighlighterIdDetails[2]);
+                        quesTextData = quesTextData.replace("<span>" + (qNoId + 1) + "</span>.", "");
+                    }
+                    var status = true;
+                    do {
+                        if (quesTextData.indexOf("SingleFITB") != -1) {
+                            var classNames = $(".SingleFITB").attr("class");
+                            quesTextData = quesTextData.replace($(".SingleFITB").html(), "<ResponsePlaceHolder>");
+                            var myRegExpClass = new RegExp('class="' + classNames + '"', 'g');
+                            quesTextData = quesTextData.replace(myRegExpClass, "");
+                        }
+                        if (typeof(jwPlayerDetailsIndex[quesIdClassName]) != "undefined" && typeof(jwPlayerDetailsIndex[quesIdClassName][TempCountIndex + ""]) != "undefined") {
+                            var tempIds = jwPlayerDetailsIndex[quesIdClassName][TempCountIndex + ""];
+                            var divText = $("#" + tempIds).html();
+                            var classNames = $("#" + tempIds).attr("class");
+                            var tabindex = $("#" + tempIds).attr("tabindex");
+                            var style = $("#" + tempIds).attr("style");
+                            //						divText = '<div id="'+tempIds+'" class="'+classNames+'" tabindex="'+tabindex+'" style="'+style+'">'+divText+'</div>';
+                            var myRegExpClass = new RegExp('class="' + classNames + '"', 'g');
+                            quesTextData = quesTextData.replace(myRegExpClass, "");
+                            var myRegExpId = new RegExp('id="' + tempIds + '"', 'g');
+                            quesTextData = quesTextData.replace(myRegExpId, "");
+                            var myRegExpTabindex = new RegExp('tabindex="' + tabindex + '"', 'g');
+                            quesTextData = quesTextData.replace(myRegExpTabindex, "");
+                            var myRegExpStyle = new RegExp('style="' + style + '"', 'g');
+                            quesTextData = quesTextData.replace(myRegExpStyle, "");
+                            var updatedQuestionContent = jwPlayerDetails[quesIdClassName][tempIds];
+                            if (mockVar.storeCandResponse == 1) {
+                                updatedQuestionContent = updatedQuestionContent.replace(/tkcimages/g, xmlFilePath + mockVar.availableQpId + '/tkcimages');
+                            } else {
+                                updatedQuestionContent = updatedQuestionContent.replace(/tkcimages/g, xmlFilePath + 'tkcimages');
+                            }
+                            quesTextData = quesTextData.replace(divText, updatedQuestionContent);
+                        } else {
+                            status = false;
+                        }
+                        TempCountIndex++;
+                    } while (status);
+                    //				mockVar.groups[textHighlighterIdDetails[0]].secDetails[textHighlighterIdDetails[1]].questions[textHighlighterIdDetails[2]].quesLangBeans[textHighlighterIdDetails[3]].quesText = quesTextData;
+                    if (textClassName.indexOf("_TextSelection") != -1) {
+                        mockVar.groups[textHighlighterIdDetails[0]].secDetails[textHighlighterIdDetails[1]].questions[textHighlighterIdDetails[2]].quesLangBeans[textHighlighterIdDetails[3]].quesText = quesTextData;
+                    } else if (textClassName.indexOf("_CompreTextSelection") != -1) {
+                        if (isMTCQuestion) {
+                            quesTextData = quesTextData + "<left_column_tag>" + ($(".left_column_tag").html()) + "<left_column_tag> <right_column_tag>" + ($(".right_column_tag").html()) + "<right_column_tag>";
+                        } else if (isBucketQuestion) {
+                            quesTextData = quesTextData + "<option_bucket_label>" + ($(".option_bucket_label").html()) + "<option_bucket_label>";
+                        } else if (isFITBQuestion) {
+                            for (var gapLength = 0; gapLength < $(".FITBQuestionList").length; gapLength++) {
+                                var gapClasses = $(".FITBQuestionList")[gapLength].classList;
+                                var gapId = "";
+                                var gapType = "";
+                                var gapContent = "";
+                                for (var gapClassesLength = 0; gapClassesLength < gapClasses.length; gapClassesLength++) {
+                                    if (gapClasses[gapClassesLength].indexOf("_FITBM") != -1 || gapClasses[gapClassesLength].indexOf("_FITBS") != -1) {
+                                        gapId = gapClasses[gapClassesLength].split("_")[0];
+                                        gapType = gapClasses[gapClassesLength].split("_")[1];
+                                        gapContent = $("." + gapClasses[gapClassesLength]).html();
+                                        if (gapType == "FITBM")
+                                            gapType = "mcq";
+                                        else
+                                            gapType = "sa";
+                                        quesTextData = quesTextData.replace(gapContent, '<gaptype="' + gapType + '" gapid="' + gapId + '">');
+                                        quesTextData = quesTextData.replace('class="' + ($(".FITBQuestionList")[gapLength].className) + '"', '');
+                                    }
+                                }
+                            }
+                        }
+                        mockVar.compreLaqQues[textHighlighterIdDetails[2]].langData[textHighlighterIdDetails[3]].quesText = quesTextData;
+                    }
+                }
+            });
+        });
+    </script>
+    <div class="protactor-div">
+        <div id="protactor">
+            <img src="./images/1.png" id="protactorid" />
+        </div>
+    </div>
+    <script>
+    </script>
+    <div class="textarea-div">
+        <div id="closeButton" class="textarea_close">X</div>
+        <textarea id="texteditor"></textarea>
+        <div align="center">
+            <div id="clear-textarea" class="clear-button-textarea clearTxt">Clear</div>
+        </div>
+    </div>
+    <div class="ruler-div">
+        <div id="ruler">
+            <img src="" id="rulerid" />
+        </div>
+    </div>
+
+
+    <!--Changes for popup Window and Image Gallery-->
+    <div id="modal-content" class="pop-up-display-content">
+        <div class="pop-up-header" style="">
+            <span class="usefullDataHeader">Useful data </span><span class="maximizeicon" title="Maximize">&nbsp;</span>
+        </div>
+        <div class="usefulDataLangDiv"></div>
+        <div class="connected-carousels" id="connected-carousels" style="padding: 20px 0px 15px;">
+            <div class="stage" id="stage">
+                <div class="carousel carousel-stage useFulImagesImages" style="overflow: auto; overflow-x: hidden;"></div>
+                <a href="#" class="prev prev-stage inactive navigationArrowPrev"><span id="prevImage">
+						<img src="images/previnactive.png"  width="32px" height="32px" />
+				</span></a> <a href="#" class="next next-stage navigationArrowNext"><span id="nextImage" >
+						<img src="images/nextactive.png"  width="32px" height="32px" />
+				</span></a>
+            </div>
+
+            <div class="navigation">
+                <a href="#" class="prev prev-navigation">Back</a> <a href="#" class="next next-navigation">Next</a>
+                <div class="carousel carousel-navigation useFulImagesListing">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="maximg_popup">
+        <div class="maximg_header">
+            <span class="close_ico_img" style="float:right"></span>
+        </div>
+        <div class="imgpop_container">
+            <img class="popup_image" src="" />
+        </div>
+    </div>
+
+    <div class="overlaypopup"></div>
+    <script type="text/javascript">
+        //$(document).ready(function() {
+        function ionRuler() {
+            /* Enable ruler with all the options and their default values */
+            if (!(document.addEventListener)) {
+                $('.ruler-div').draggable();
+                var src = document.getElementById("rulerid").src,
+                    angle = 0;
+                document.getElementById("ruler").innerHTML = "";
+                var R = Raphael("ruler", 920, 480);
+                //R.circle(320, 240, 200).attr({fill: "#000", "fill-opacity": .5, "stroke-width": 5});
+                var img = R.image(src, 70, 210, 802, 57);
+                var butt1 = R.set(),
+                    butt2 = R.set();
+                butt1.push(R.circle(24.833, 26.917, 26.667).attr({
+                        stroke: "#ccc",
+                        fill: "#fff",
+                        "fill-opacity": .4,
+                        "stroke-width": 2
+                    }),
+                    R.path("M12.582,9.551C3.251,16.237,0.921,29.021,7.08,38.564l-2.36,1.689l4.893,2.262l4.893,2.262l-0.568-5.36l-0.567-5.359l-2.365,1.694c-4.657-7.375-2.83-17.185,4.352-22.33c7.451-5.338,17.817-3.625,23.156,3.824c5.337,7.449,3.625,17.813-3.821,23.152l2.857,3.988c9.617-6.893,11.827-20.277,4.935-29.896C35.591,4.87,22.204,2.658,12.582,9.551z").attr({
+                        stroke: "none",
+                        fill: "#000"
+                    }),
+                    R.circle(24.833, 26.917, 26.667).attr({
+                        fill: "#fff",
+                        opacity: 0
+                    }));
+                butt2.push(R.circle(24.833, 26.917, 26.667).attr({
+                        stroke: "#ccc",
+                        fill: "#fff",
+                        "fill-opacity": .4,
+                        "stroke-width": 2
+                    }),
+                    R.path("M37.566,9.551c9.331,6.686,11.661,19.471,5.502,29.014l2.36,1.689l-4.893,2.262l-4.893,2.262l0.568-5.36l0.567-5.359l2.365,1.694c4.657-7.375,2.83-17.185-4.352-22.33c-7.451-5.338-17.817-3.625-23.156,3.824C6.3,24.695,8.012,35.06,15.458,40.398l-2.857,3.988C2.983,37.494,0.773,24.109,7.666,14.49C14.558,4.87,27.944,2.658,37.566,9.551z").attr({
+                        stroke: "none",
+                        fill: "#000"
+                    }),
+                    R.circle(24.833, 26.917, 26.667).attr({
+                        fill: "#fff",
+                        opacity: 0
+                    }));
+                butt1.translate(10, 181);
+                butt2.translate(10, 245);
+                angle = 0;
+                butt1[2].click(function() {
+                    angle -= 1;
+                    img.stop().animate({
+                        transform: "r" + angle
+                    }, 1000, "<>");
+                }).mouseover(function() {
+                    butt1[1].animate({
+                        fill: "#fc0"
+                    }, 300);
+                }).mouseout(function() {
+                    butt1[1].stop().attr({
+                        fill: "#000"
+                    });
+                });
+                butt2[2].click(function() {
+                    angle += 1;
+                    img.animate({
+                        transform: "r" + angle
+                    }, 1000, "<>");
+                }).mouseover(function() {
+                    butt2[1].animate({
+                        fill: "#fc0"
+                    }, 300);
+                }).mouseout(function() {
+                    butt2[1].stop().attr({
+                        fill: "#000"
+                    });
+                });
+            } else {
+                $('.ruler-div').rotatable().draggable();
+            }
+        }
+
+        function ionProtractor() {
+            //$(document).ready(function(){
+            if (!(document.addEventListener)) {
+                $('.protactor-div').draggable();
+                var src = document.getElementById("protactorid").src,
+                    angle = 0;
+                document.getElementById("protactor").innerHTML = "";
+                var R = Raphael("protactor", 640, 480);
+                //R.circle(320, 240, 200).attr({fill: "#000", "fill-opacity": .5, "stroke-width": 5});
+                var img = R.image(src, 50, 120, 360, 180);
+                var butt1 = R.set(),
+                    butt2 = R.set();
+                butt1.push(R.circle(24.833, 26.917, 26.667).attr({
+                        stroke: "#ccc",
+                        fill: "#fff",
+                        "fill-opacity": .4,
+                        "stroke-width": 2
+                    }),
+                    R.path("M12.582,9.551C3.251,16.237,0.921,29.021,7.08,38.564l-2.36,1.689l4.893,2.262l4.893,2.262l-0.568-5.36l-0.567-5.359l-2.365,1.694c-4.657-7.375-2.83-17.185,4.352-22.33c7.451-5.338,17.817-3.625,23.156,3.824c5.337,7.449,3.625,17.813-3.821,23.152l2.857,3.988c9.617-6.893,11.827-20.277,4.935-29.896C35.591,4.87,22.204,2.658,12.582,9.551z").attr({
+                        stroke: "none",
+                        fill: "#000"
+                    }),
+                    R.circle(24.833, 26.917, 26.667).attr({
+                        fill: "#fff",
+                        opacity: 0
+                    }));
+                butt2.push(R.circle(24.833, 26.917, 26.667).attr({
+                        stroke: "#ccc",
+                        fill: "#fff",
+                        "fill-opacity": .4,
+                        "stroke-width": 2
+                    }),
+                    R.path("M37.566,9.551c9.331,6.686,11.661,19.471,5.502,29.014l2.36,1.689l-4.893,2.262l-4.893,2.262l0.568-5.36l0.567-5.359l2.365,1.694c4.657-7.375,2.83-17.185-4.352-22.33c-7.451-5.338-17.817-3.625-23.156,3.824C6.3,24.695,8.012,35.06,15.458,40.398l-2.857,3.988C2.983,37.494,0.773,24.109,7.666,14.49C14.558,4.87,27.944,2.658,37.566,9.551z").attr({
+                        stroke: "none",
+                        fill: "#000"
+                    }),
+                    R.circle(24.833, 26.917, 26.667).attr({
+                        fill: "#fff",
+                        opacity: 0
+                    }));
+                butt1.translate(10, 181);
+                butt2.translate(10, 245);
+                angle = 0;
+                butt1[2].click(function() {
+                    angle -= 1;
+                    img.stop().animate({
+                        transform: "r" + angle
+                    }, 1000, "<>");
+                }).mouseover(function() {
+                    butt1[1].animate({
+                        fill: "#fc0"
+                    }, 300);
+                }).mouseout(function() {
+                    butt1[1].stop().attr({
+                        fill: "#000"
+                    });
+                });
+                butt2[2].click(function() {
+                    angle += 1;
+                    img.animate({
+                        transform: "r" + angle
+                    }, 1000, "<>");
+                }).mouseover(function() {
+                    butt2[1].animate({
+                        fill: "#fc0"
+                    }, 300);
+                }).mouseout(function() {
+                    butt2[1].stop().attr({
+                        fill: "#000"
+                    });
+                });
+            } else {
+                $('.protactor-div').rotatable().draggable();
+            }
+
+            //});
+        }
+        //});
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $(".nextbtn").hover(function() {
+                $("#forwordImage").attr("src", "images/Forward-25-hover.png");
+            }, function() {
+                $("#forwordImage").attr("src", "images/Forward-25.png");
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            changeFocus();
+            $("#answer").click(function() {
+                localStorage.setItem('txtObjectid', "answer");
+                changeFocus();
+                return false;
+            });
+
+            $("#texteditor").click(function() {
+                localStorage.setItem('txtObjectid', "texteditor");
+                changeFocus();
+                return false;
+            });
+        });
+
+        function changeFocus() {
+            if (localStorage.getItem('txtObjectid') == null)
+                id = "answer";
+            else
+                id = localStorage.getItem('txtObjectid');
+            var v = "#" + id;
+            $(v).focus();
+        }
+    </script>
+</body>
+
+</html>
